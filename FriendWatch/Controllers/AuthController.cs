@@ -1,9 +1,13 @@
-﻿using FriendWatch.DTOs.Requests;
+﻿using System.Net.Http.Headers;
+
+using FriendWatch.DTOs.Requests;
 using FriendWatch.DTOs.Responses;
 using FriendWatch.Services.AuthService;
 using FriendWatch.Services.UserService;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 
 namespace FriendWatch.Controllers
 {
@@ -19,6 +23,20 @@ namespace FriendWatch.Controllers
             _userService = userService;
             _authService = authService;
         }
+
+        [HttpGet("public-ping")]
+        public async Task<IActionResult> PublicPing()
+        {
+            return Ok("public-ping");
+        }        
+        
+        [Authorize]
+        [HttpGet("forbidden-ping")]
+        public async Task<IActionResult> ForbiddenPing()
+        {
+            return Ok("forbidden-ping");
+        }
+
 
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRequest request)
@@ -41,6 +59,28 @@ namespace FriendWatch.Controllers
                 RefreshToken = loginResult.Data.Item2
             };
 
+            return Ok(response);
+        }
+
+        [Authorize]
+        [HttpGet("refresh-token")]
+        public async Task<IActionResult> RefreshToken()
+        {
+            var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split()[1];
+
+            if (token == null)
+                return BadRequest("Missing refresh token");
+
+            var refreshResult = await _authService.RefreshToken(token!);
+
+            if (!refreshResult.IsSuccess)
+                return BadRequest("Invalid refresh token");
+
+            var response = new LoginResponse
+            {
+                AccessToken = refreshResult.Data.Item1,
+                RefreshToken = refreshResult.Data.Item2
+            };
             return Ok(response);
         }
     }

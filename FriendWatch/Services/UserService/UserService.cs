@@ -22,7 +22,7 @@ namespace FriendWatch.Services.UserService
                 Username = userDto.Username
             };
 
-            await _userRepository.Create(user);
+            await _userRepository.CreateAsync(user);
             return;
         }
     }

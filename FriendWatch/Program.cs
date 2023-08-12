@@ -4,6 +4,7 @@ global using FriendWatch.Services.UserService;
 using System.Text;
 
 using FriendWatch.Data.Repositories.UserRepository;
+using FriendWatch.Middlewares;
 using FriendWatch.Services.AuthService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
@@ -24,14 +25,14 @@ builder.Services
         options.TokenValidationParameters = new TokenValidationParameters()
         {
             ClockSkew = TimeSpan.Zero,
-            ValidateIssuer = true,
-            ValidateAudience = true,
+            ValidateIssuer = false,
+            ValidateAudience = false,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
             ValidAudience = builder.Configuration["JWT:ValidAudience"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"])
+                Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]!)
             ),
         };
     });
@@ -52,6 +53,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseMiddleware<RefreshTokenMiddleware>();
 
 app.MapControllers();
 

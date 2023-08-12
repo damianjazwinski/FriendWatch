@@ -21,9 +21,34 @@ namespace FriendWatch.Services.AuthService
 
         public async Task<ServiceResponse<(string, string)>> Login(LoginRequest request)
         {
-            var user = await _userRepository.GetByUsername(request.Username);
+            var user = await _userRepository.GetByUsernameAsync(request.Username);
+
+            if (user is null)
+            {
+                return new ServiceResponse<(string, string)>(false);
+            }
 
             if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
+            {
+                return new ServiceResponse<(string, string)>(false);
+            }
+
+            return new ServiceResponse<(string, string)>(true, GenerateJSONWebToken(user));
+        }
+
+        public async Task<ServiceResponse<(string, string)>> RefreshToken(string token)
+        {
+            var decodedToken = new JwtSecurityTokenHandler().ReadJwtToken(token);
+            var username = decodedToken.Claims.SingleOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
+            
+            if (string.IsNullOrEmpty(username)) 
+            {
+                return new ServiceResponse<(string, string)>(false);
+            }
+
+            var user = await _userRepository.GetByUsernameAsync(username!);
+
+            if (user is null)
             {
                 return new ServiceResponse<(string, string)>(false);
             }
@@ -40,6 +65,7 @@ namespace FriendWatch.Services.AuthService
             };
             var refreshClaims = new List<Claim>
             {
+                new Claim(ClaimTypes.Name, user.Username),
                 new Claim("tokenType", "refresh")
             };
 

@@ -10,36 +10,36 @@ namespace FriendWatch.Data.Repositories.UserRepository
         {
             _context = context;
         }
-        public async Task Create(User user)
+        public async Task CreateAsync(User user)
         {
             await _context.Users.AddAsync(user);
             _context.SaveChanges();
             return;
         }
 
-        public Task Delete(int id)
+        public Task<List<User>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<User>> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<User> GetById(int id)
+        public async Task<User> GetByIdAsync(int id)
         {
             var user = await _context.Users.FindAsync(id);
             return user;
         }
 
-        public async Task<User> GetByUsername(string userName)
+        public async Task<User> GetByUsernameAsync(string username)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == userName);
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == username);
             return user;
         }
 
-        public Task Update(User user)
+        public Task UpdateAsync(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteAsync(int id)
         {
             throw new NotImplementedException();
         }
