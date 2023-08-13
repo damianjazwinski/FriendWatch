@@ -3,9 +3,12 @@ global using FriendWatch.Entities;
 global using FriendWatch.Services.UserService;
 using System.Text;
 
+using FriendWatch.Data.Repositories.CircleRepository;
 using FriendWatch.Data.Repositories.UserRepository;
 using FriendWatch.Middlewares;
 using FriendWatch.Services.AuthService;
+using FriendWatch.Services.CircleService;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 using Microsoft.IdentityModel.Tokens;
@@ -37,9 +40,12 @@ builder.Services
         };
     });
 builder.Services.AddDbContext<DataContext>();
-builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICircleRepository, CircleRepository>();
+builder.Services.AddScoped<ICircleService, CircleService>();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

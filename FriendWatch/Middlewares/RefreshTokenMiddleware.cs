@@ -8,8 +8,8 @@ namespace FriendWatch.Middlewares
     public class RefreshTokenMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly string _authControllerName = "Auth";
-        private readonly string _refreshTokenActionName = "RefreshToken";
+        private readonly string _authControllerName = "auth";
+        private readonly string _refreshTokenActionName = "refreshtoken";
         public RefreshTokenMiddleware(RequestDelegate next)
         {
             _next = next;
@@ -27,16 +27,16 @@ namespace FriendWatch.Middlewares
 
 
             // check refresh token
-            var controllerName = (string?) context.GetRouteValue("controller");
-            var actionName = (string?) context.GetRouteValue("action");
+            var controllerName = (string?)context.GetRouteValue("controller");
+            var actionName = (string?)context.GetRouteValue("action");
             var tokenType = context.User.Claims.SingleOrDefault(claim => claim.Type == "tokenType")?.Value;
 
-            if (controllerName == _authControllerName && actionName == _refreshTokenActionName && tokenType == "refresh")
+            if (controllerName?.ToLower() == _authControllerName && actionName?.ToLower() == _refreshTokenActionName && tokenType == "refresh")
             {
                 await _next(context);
                 return;
             }
-            else if (tokenType == "access" && !(controllerName == _authControllerName && actionName == _refreshTokenActionName))
+            else if (tokenType == "access" && !(controllerName?.ToLower() == _authControllerName && actionName?.ToLower() == _refreshTokenActionName))
             {
                 await _next(context);
                 return;

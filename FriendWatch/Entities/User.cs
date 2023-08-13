@@ -3,7 +3,9 @@
     public class User
     {
         public int Id { get; set; }
-        public string Username { get; set; } = null!;
+        public string Username { get; set; }
         public string PasswordHash { get; set; }
+        public List<Circle> Circles { get; set; }
+        public List<Circle> OwnedCircles { get; set; }
     }
 }

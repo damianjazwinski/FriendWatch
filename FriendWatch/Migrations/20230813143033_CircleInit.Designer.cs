@@ -4,6 +4,7 @@ using FriendWatch.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FriendWatch.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230813143033_CircleInit")]
+    partial class CircleInit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace FriendWatch.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("CircleUser", b =>
-                {
-                    b.Property<int>("MembersId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CirclesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("MembersId", "CirclesId");
-
-                    b.HasIndex("CirclesId");
-
-                    b.ToTable("CircleUser");
-                });
 
             modelBuilder.Entity("FriendWatch.Entities.Circle", b =>
                 {
@@ -48,15 +36,15 @@ namespace FriendWatch.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("OwnerId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -73,6 +61,9 @@ namespace FriendWatch.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CircleId")
+                        .HasColumnType("int");
+
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -83,28 +74,15 @@ namespace FriendWatch.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CircleId");
+
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("CircleUser", b =>
-                {
-                    b.HasOne("FriendWatch.Entities.Circle", null)
-                        .WithMany()
-                        .HasForeignKey("CirclesId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("FriendWatch.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("MembersId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("FriendWatch.Entities.Circle", b =>
                 {
                     b.HasOne("FriendWatch.Entities.User", "Owner")
-                        .WithMany("OwnedCircles")
+                        .WithMany()
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -114,7 +92,14 @@ namespace FriendWatch.Migrations
 
             modelBuilder.Entity("FriendWatch.Entities.User", b =>
                 {
-                    b.Navigation("OwnedCircles");
+                    b.HasOne("FriendWatch.Entities.Circle", null)
+                        .WithMany("Members")
+                        .HasForeignKey("CircleId");
+                });
+
+            modelBuilder.Entity("FriendWatch.Entities.Circle", b =>
+                {
+                    b.Navigation("Members");
                 });
 #pragma warning restore 612, 618
         }

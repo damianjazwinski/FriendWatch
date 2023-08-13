@@ -25,5 +25,11 @@ namespace FriendWatch.Services.UserService
             await _userRepository.CreateAsync(user);
             return;
         }
+
+        public async Task<User> GetByIdAsync(int id)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+            return user;
+        }
     }
 }

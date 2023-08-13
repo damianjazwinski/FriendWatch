@@ -24,7 +24,7 @@ namespace FriendWatch.Data.Repositories.UserRepository
 
         public async Task<User> GetByIdAsync(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users.Include(x => x.Circles).SingleOrDefaultAsync(x => x.Id == id);
             return user;
         }
 

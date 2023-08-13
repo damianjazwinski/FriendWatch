@@ -61,11 +61,13 @@ namespace FriendWatch.Services.AuthService
             var accessClaims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim("tokenType", "access")
             };
             var refreshClaims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim("tokenType", "refresh")
             };
 
