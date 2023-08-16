@@ -1,23 +1,25 @@
-﻿using FriendWatch.DTOs.Requests;
-using FriendWatch.Services.CircleService;
+﻿using System.Security.Claims;
 
-using Microsoft.AspNetCore.Http;
+using FriendWatch.Application.DTOs;
+using FriendWatch.Application.Services;
+using FriendWatch.DTOs.Requests;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace FriendWatch.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CirclesController : ControllerBase
+    public class CircleController : ControllerBase
     {
         private readonly ICircleService _circleService;
-        public CirclesController(ICircleService circleService)
+        public CircleController(ICircleService circleService)
         {
             _circleService = circleService;
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id) 
+        public async Task<IActionResult> Get(int id)
         {
             return Ok($"{id}");
         }
@@ -25,7 +27,14 @@ namespace FriendWatch.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateCircleRequest request)
         {
-            await _circleService.CreateCircleAsync(request);
+            var currentUserId = int.Parse(HttpContext.User.Claims.Single(claim => claim.Type == ClaimTypes.NameIdentifier).Value);
+
+            var circleDto = new CircleDto 
+            { 
+                Name = request.Name 
+            };
+
+            await _circleService.CreateCircleAsync(circleDto, currentUserId);
             return Ok();
         }
     }

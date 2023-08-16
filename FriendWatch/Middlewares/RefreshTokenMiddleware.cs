@@ -1,7 +1,5 @@
-﻿using System.Net;
-
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace FriendWatch.Middlewares
 {

@@ -1,9 +1,9 @@
 ﻿using System.Net.Http.Headers;
 
+using FriendWatch.Application.DTOs;
+using FriendWatch.Application.Services;
 using FriendWatch.DTOs.Requests;
 using FriendWatch.DTOs.Responses;
-using FriendWatch.Services.AuthService;
-using FriendWatch.Services.UserService;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -41,14 +41,28 @@ namespace FriendWatch.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRequest request)
         {
-            await _userService.CreateUserAsync(request);
+            // TODO: Add confirmation validation logic
+
+            var userDto = new UserDto
+            {
+                Username = request.Username,
+                Password = request.Password
+            };
+
+            await _userService.CreateUserAsync(userDto);
             return Ok();
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<LoginResponse>> Login(LoginRequest request)
         {
-            var loginResult = await _authService.Login(request);
+            var userDto = new UserDto
+            {
+                Username = request.Username,
+                Password = request.Password
+            };
+
+            var loginResult = await _authService.Login(userDto);
 
             if (!loginResult.IsSuccess)
                 return BadRequest("Username or password incorrect");

@@ -1,16 +1,13 @@
-global using FriendWatch.Data;
-global using FriendWatch.Entities;
-global using FriendWatch.Services.UserService;
 using System.Text;
 
-using FriendWatch.Data.Repositories.CircleRepository;
-using FriendWatch.Data.Repositories.UserRepository;
+using FriendWatch.Application.Repositories;
+using FriendWatch.Application.Services;
 using FriendWatch.Middlewares;
-using FriendWatch.Services.AuthService;
-using FriendWatch.Services.CircleService;
+using FriendWatch.Infrastructure.Persistence;
+using FriendWatch.Infrastructure.Repositories;
+using FriendWatch.Infrastructure.Services;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,6 +42,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICircleRepository, CircleRepository>();
 builder.Services.AddScoped<ICircleService, CircleService>();
+builder.Services.AddScoped<IInvitationRepository, InvitationRepository>();
+builder.Services.AddScoped<IInvitationService, InvitationService>();
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();

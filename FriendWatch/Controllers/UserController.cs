@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FriendWatch.Application.Services;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace FriendWatch.Controllers
@@ -18,7 +19,16 @@ namespace FriendWatch.Controllers
         public async Task<IActionResult> Get(int id)
         {
             var user = await _userService.GetByIdAsync(id);
-            return Ok();
+            //var userResponse = new
+            //{
+            //    Id = user.Id,
+            //    Username = user.Username,
+            //    OwnedCircles = user.OwnedCircles,
+            //    JoinedCircles = user.Circles,
+            //    ReceivedInvitations = user.ReceivedInvitations
+            //};
+
+            return Ok(user);
         }
     }
 }
