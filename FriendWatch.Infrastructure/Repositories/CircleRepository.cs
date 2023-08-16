@@ -7,8 +7,8 @@ namespace FriendWatch.Infrastructure.Repositories
 {
     public class CircleRepository : ICircleRepository
     {
-        private readonly DataContext _context;
-        public CircleRepository(DataContext context) 
+        private readonly FriendWatchDbContext _context;
+        public CircleRepository(FriendWatchDbContext context) 
         {
             _context = context;
         }

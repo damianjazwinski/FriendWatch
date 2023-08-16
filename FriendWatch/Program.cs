@@ -36,7 +36,7 @@ builder.Services
             ),
         };
     });
-builder.Services.AddDbContext<DataContext>();
+builder.Services.AddDbContext<FriendWatchDbContext>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();

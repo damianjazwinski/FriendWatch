@@ -7,9 +7,9 @@ namespace FriendWatch.Infrastructure.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly DataContext _context;
+        private readonly FriendWatchDbContext _context;
 
-        public UserRepository(DataContext context)
+        public UserRepository(FriendWatchDbContext context)
         {
             _context = context;
         }

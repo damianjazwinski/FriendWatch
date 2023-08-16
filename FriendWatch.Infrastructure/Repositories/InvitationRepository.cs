@@ -7,9 +7,9 @@ namespace FriendWatch.Infrastructure.Repositories
 {
     public class InvitationRepository : IInvitationRepository
     {
-        private readonly DataContext _context;
+        private readonly FriendWatchDbContext _context;
 
-        public InvitationRepository(DataContext context)
+        public InvitationRepository(FriendWatchDbContext context)
         {
             _context = context;
         }

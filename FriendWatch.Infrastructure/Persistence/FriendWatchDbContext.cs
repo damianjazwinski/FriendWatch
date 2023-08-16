@@ -5,11 +5,11 @@ using Microsoft.Extensions.Configuration;
 
 namespace FriendWatch.Infrastructure.Persistence
 {
-    public class DataContext : DbContext
+    public class FriendWatchDbContext : DbContext
     {
         private readonly IConfiguration _configuration;
 
-        public DataContext(DbContextOptions<DataContext> options, IConfiguration configuration) : base(options)
+        public FriendWatchDbContext(DbContextOptions<FriendWatchDbContext> options, IConfiguration configuration) : base(options)
         {
             _configuration = configuration;
         }
