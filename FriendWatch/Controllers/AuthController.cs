@@ -67,17 +67,45 @@ namespace FriendWatch.Controllers
             if (!loginResult.IsSuccess)
                 return BadRequest("Username or password incorrect");
 
+
+
+            var accessTokenExpiration = DateTimeOffset.UtcNow.AddMinutes(20);
+            var refreshTokenExpiration = DateTimeOffset.UtcNow.AddDays(1);
+
+            var accessCookieOptions = new CookieOptions()
+            {
+                Path = "/",
+                HttpOnly = true,
+                Expires = accessTokenExpiration,
+                IsEssential = true,
+                Secure = true,
+                SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None
+            };
+
+            var refreshCookieOptions = new CookieOptions()
+            {
+                Path = "api/auth/refresh",
+                HttpOnly = true,
+                Expires = refreshTokenExpiration,
+                IsEssential = true,
+                Secure = true,
+                SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None
+            };
+
+            HttpContext.Response.Cookies.Append("AccessToken", loginResult.Data.Item1, accessCookieOptions);
+            HttpContext.Response.Cookies.Append("RefreshToken", loginResult.Data.Item2, refreshCookieOptions);
+
             var response = new LoginResponse
             {
-                AccessToken = loginResult.Data.Item1,
-                RefreshToken = loginResult.Data.Item2
+                AccessTokenExpiration = accessTokenExpiration.ToUnixTimeMilliseconds(),
+                RefreshTokenExpiration = refreshTokenExpiration.ToUnixTimeMilliseconds()
             };
 
             return Ok(response);
         }
 
         [Authorize]
-        [HttpGet("refresh-token")]
+        [HttpGet("refresh")]
         public async Task<IActionResult> RefreshToken()
         {
             var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split()[1];
@@ -90,12 +118,9 @@ namespace FriendWatch.Controllers
             if (!refreshResult.IsSuccess)
                 return BadRequest("Invalid refresh token");
 
-            var response = new LoginResponse
-            {
-                AccessToken = refreshResult.Data.Item1,
-                RefreshToken = refreshResult.Data.Item2
-            };
-            return Ok(response);
+            // TODO: Remove cookies and add new ones
+
+            return Ok();
         }
     }
 }

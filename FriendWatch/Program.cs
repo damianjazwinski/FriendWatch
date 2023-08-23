@@ -9,10 +9,15 @@ using FriendWatch.Infrastructure.Services;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.Net.Http.Headers;
 
+const string myCorsOriginName = "allowReactApp";
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddCors(options => options
+    .AddPolicy(name: myCorsOriginName, policy => policy.WithOrigins("https://localhost:5173").AllowAnyMethod().AllowAnyHeader().AllowCredentials()));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -34,6 +39,14 @@ builder.Services
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]!)
             ),
+        };
+        options.Events = new()
+        {
+            OnMessageReceived = (context) =>
+            {
+                context.Token = context.Request.Cookies["AccessToken"];
+                return Task.CompletedTask;
+            }
         };
     });
 builder.Services.AddDbContext<FriendWatchDbContext>();
@@ -60,6 +73,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.UseMiddleware<RefreshTokenMiddleware>();
+
+app.UseCors(myCorsOriginName);
 
 app.MapControllers();
 
