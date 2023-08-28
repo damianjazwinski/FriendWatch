@@ -3,13 +3,14 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.Configuration;
+
 
 using FriendWatch.Application.Services;
 using FriendWatch.Application.Repositories;
 using FriendWatch.Domain.Common;
 using FriendWatch.Domain.Entities;
 using FriendWatch.Application.DTOs;
+using Microsoft.Extensions.Configuration;
 
 namespace FriendWatch.Infrastructure.Services
 {
@@ -80,8 +81,11 @@ namespace FriendWatch.Infrastructure.Services
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
-            var token = new JwtSecurityToken(claims: accessClaims, expires: DateTime.Now.AddMinutes(20), signingCredentials: creds);
-            var refreshToken = new JwtSecurityToken(claims: refreshClaims, expires: DateTime.Now.AddDays(1), signingCredentials: creds);
+            _ = int.TryParse(_configuration.GetSection("Cookies").GetSection("AccessTokenCookieExpirationMinutes").Value, out int minutes);
+            _ = int.TryParse(_configuration.GetSection("Cookies").GetSection("RefreshTokenCookieExpirationDays").Value, out int days);
+
+            var token = new JwtSecurityToken(claims: accessClaims, expires: DateTime.Now.AddMinutes(minutes), signingCredentials: creds);
+            var refreshToken = new JwtSecurityToken(claims: refreshClaims, expires: DateTime.Now.AddDays(days), signingCredentials: creds);
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             var refreshJwt = new JwtSecurityTokenHandler().WriteToken(refreshToken);

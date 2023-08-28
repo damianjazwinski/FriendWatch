@@ -27,6 +27,13 @@ namespace FriendWatch.Infrastructure.Persistence
         {
             base.OnModelCreating(modelBuilder);
 
+            #region User
+            modelBuilder.Entity<User>()
+                .HasMany(receiver => receiver.ReceivedInvitations)
+                .WithOne(invitation => invitation.Receiver)
+                .HasForeignKey(invitation => invitation.ReceiverId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             modelBuilder.Entity<User>()
                 .HasMany(user => user.Circles)
                 .WithMany(circle => circle.Members)
@@ -35,6 +42,12 @@ namespace FriendWatch.Infrastructure.Persistence
                     l => l.HasOne(typeof(Circle)).WithMany().HasForeignKey("CirclesId").HasPrincipalKey(nameof(Circle.Id)).OnDelete(DeleteBehavior.NoAction),
                     r => r.HasOne(typeof(User)).WithMany().HasForeignKey("MembersId").HasPrincipalKey(nameof(User.Id)).OnDelete(DeleteBehavior.NoAction),
                     j => j.HasKey("MembersId", "CirclesId"));
+
+            modelBuilder.Entity<User>()
+                .HasIndex(user => user.Username)
+                .IsUnique();
+
+            #endregion
 
             modelBuilder.Entity<Circle>()
                 .HasOne(circle => circle.Owner)
@@ -47,11 +60,7 @@ namespace FriendWatch.Infrastructure.Persistence
                 .HasForeignKey(invitation => invitation.CircleId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<User>()
-                .HasMany(receiver => receiver.ReceivedInvitations)
-                .WithOne(invitation => invitation.Receiver)
-                .HasForeignKey(invitation => invitation.ReceiverId)
-                .OnDelete(DeleteBehavior.NoAction);
+
         }
 
         public DbSet<User> Users { get; set; }

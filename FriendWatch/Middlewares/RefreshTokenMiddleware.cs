@@ -7,7 +7,7 @@ namespace FriendWatch.Middlewares
     {
         private readonly RequestDelegate _next;
         private readonly string _authControllerName = "auth";
-        private readonly string _refreshTokenActionName = "refreshtoken";
+        private readonly string _refreshTokenActionName = "refresh";
         public RefreshTokenMiddleware(RequestDelegate next)
         {
             _next = next;

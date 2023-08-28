@@ -17,16 +17,21 @@ namespace FriendWatch.Infrastructure.Services
         {
             _userRepository = userRepository;
         }
-        public async Task CreateUserAsync(UserDto userDto)
+        public async Task<ServiceResponse<UserDto>> CreateUserAsync(UserDto userDto)
         {
-            var user = new User
+            // check for already existing user with given username
+            var existingUser = await _userRepository.GetByUsernameAsync(userDto.Username);
+            
+            if (existingUser != null)
+                return new ServiceResponse<UserDto>(false, null);
+
+            await _userRepository.CreateAsync(new User
             {
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(userDto.Password),
                 Username = userDto.Username
-            };
+            });
 
-            await _userRepository.CreateAsync(user);
-            return;
+            return new ServiceResponse<UserDto>(true, null);
         }
 
         public async Task<ServiceResponse<UserDto>> GetByIdAsync(int id)

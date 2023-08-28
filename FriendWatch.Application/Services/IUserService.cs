@@ -6,7 +6,7 @@ namespace FriendWatch.Application.Services
 {
     public interface IUserService
     {
-        Task CreateUserAsync(UserDto userDto);
+        Task<ServiceResponse<UserDto>> CreateUserAsync(UserDto userDto);
         Task<ServiceResponse<UserDto>> GetByIdAsync(int id);
     }
 }

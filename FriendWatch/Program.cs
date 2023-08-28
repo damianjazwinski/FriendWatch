@@ -2,7 +2,6 @@ using System.Text;
 
 using FriendWatch.Application.Repositories;
 using FriendWatch.Application.Services;
-using FriendWatch.Middlewares;
 using FriendWatch.Infrastructure.Persistence;
 using FriendWatch.Infrastructure.Repositories;
 using FriendWatch.Infrastructure.Services;
@@ -11,20 +10,27 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.Net.Http.Headers;
+using Microsoft.AspNetCore.Authorization;
+using FriendWatch.Middlewares;
 
 const string myCorsOriginName = "allowReactApp";
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddCors(options => options
-    .AddPolicy(name: myCorsOriginName, policy => policy.WithOrigins("https://localhost:5173").AllowAnyMethod().AllowAnyHeader().AllowCredentials()));
+    .AddPolicy(name: myCorsOriginName, policy => policy.WithOrigins("https://localhost").AllowAnyMethod().AllowAnyHeader().AllowCredentials()));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddAuthorization(options =>
+    {
+        options.DefaultPolicy = new AuthorizationPolicyBuilder().RequireClaim("tokenType", "access").Build();
+        options.AddPolicy("RefreshPolicy", policy => policy.RequireClaim("tokenType", "refresh"));
+
+    });
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters()
@@ -44,7 +50,14 @@ builder.Services
         {
             OnMessageReceived = (context) =>
             {
-                context.Token = context.Request.Cookies["AccessToken"];
+                // check which type of token is required for current authorized action
+                var authorizeAttribute = context.HttpContext.GetEndpoint()?.Metadata.GetMetadata<AuthorizeAttribute>();
+
+                if (authorizeAttribute != null && authorizeAttribute.Policy == "RefreshPolicy")
+                    context.Token = context.Request.Cookies["RefreshToken"];
+                else if (authorizeAttribute != null)
+                    context.Token = context.Request.Cookies["AccessToken"];
+
                 return Task.CompletedTask;
             }
         };
@@ -72,10 +85,10 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.UseMiddleware<RefreshTokenMiddleware>();
-
 app.UseCors(myCorsOriginName);
 
 app.MapControllers();
+
+//app.UseMiddleware<RefreshTokenMiddleware>();
 
 app.Run();
