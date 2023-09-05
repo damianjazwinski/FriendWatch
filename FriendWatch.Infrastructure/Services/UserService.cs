@@ -23,7 +23,7 @@ namespace FriendWatch.Infrastructure.Services
             var existingUser = await _userRepository.GetByUsernameAsync(userDto.Username);
             
             if (existingUser != null)
-                return new ServiceResponse<UserDto>(false, null);
+                return new ServiceResponse<UserDto>(false, null, "Username is already taken");
 
             await _userRepository.CreateAsync(new User
             {
@@ -37,13 +37,25 @@ namespace FriendWatch.Infrastructure.Services
         public async Task<ServiceResponse<UserDto>> GetByIdAsync(int id)
         {
             var user = await _userRepository.GetByIdAsync(id);
-            var userDto = new UserDto
+            if (user != null)
             {
-                Username = user.Username,
-                Password = null!
-            };
+                var userDto = new UserDto
+                {
+                    Id = user.Id,
+                    Username = user.Username,
+                    Password = null!
+                };
 
-            return new ServiceResponse<UserDto>(true, userDto);
+                return new ServiceResponse<UserDto>(true, userDto);
+            }
+
+            return new ServiceResponse<UserDto>(false, null, "User not found");
+        }
+
+        public Task<ServiceResponse<UserDto>> GetByIdAsync(string id)
+        {
+            var userId = int.Parse(id);
+            return GetByIdAsync(userId);
         }
     }
 }

@@ -1,5 +1,9 @@
-﻿using FriendWatch.Application.Services;
+﻿using System.Security.Claims;
 
+using FriendWatch.Application.Services;
+using FriendWatch.DTOs.Responses;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FriendWatch.Controllers
@@ -15,20 +19,18 @@ namespace FriendWatch.Controllers
             _userService = userService;
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Get()
         {
-            var user = await _userService.GetByIdAsync(id);
-            //var userResponse = new
-            //{
-            //    Id = user.Id,
-            //    Username = user.Username,
-            //    OwnedCircles = user.OwnedCircles,
-            //    JoinedCircles = user.Circles,
-            //    ReceivedInvitations = user.ReceivedInvitations
-            //};
+            var userId = HttpContext.User.Claims.SingleOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)!.Value;
+            var result = await _userService.GetByIdAsync(userId);
 
-            return Ok(user);
+            if (!result.IsSuccess)
+                return BadRequest(new ErrorResponse { Messages = new string[] { result.Message } });
+
+            var userResponse = new GetUserResponse { Id = result.Data!.Id, Username = result.Data.Username };
+            return Ok(userResponse);
         }
     }
 }

@@ -69,7 +69,7 @@ namespace FriendWatch.Controllers
             var result = await _userService.CreateUserAsync(userDto);
 
             if (!result.IsSuccess)
-                return BadRequest(new ErrorResponse { Messages = new string[] { "Username is already taken" } });  // TODO: Add message to ServiceResponse
+                return BadRequest(new ErrorResponse { Messages = new string[] { result.Message } });
 
             return Ok();
         }
@@ -86,7 +86,7 @@ namespace FriendWatch.Controllers
             var loginResult = await _authService.Login(userDto);
 
             if (!loginResult.IsSuccess)
-                return BadRequest(new ErrorResponse { Messages = new string[] { "Username or password incorrect" } });
+                return BadRequest(new ErrorResponse { Messages = new string[] { loginResult.Message } });
 
 
 

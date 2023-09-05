@@ -24,19 +24,24 @@ namespace FriendWatch.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Circle> GetByIdAsync(int id)
+        public async Task<Circle?> GetByIdAsync(int id)
         {
             return await _context.Circles.Include(x => x.Owner).SingleOrDefaultAsync(x => x.Id == id);
+        }        
+        
+        public async Task<Circle?> GetByOwnerIdAndNameAsync(int ownerId, string name)
+        {
+            return await _context.Circles.Include(x => x.Owner).SingleOrDefaultAsync(x => x.OwnerId == ownerId && x.Name == name);
         }
 
-        public async Task<Circle> GetByNameAsync(string name)
+        public async Task<List<Circle>> GetByNameAsync(string name)
         {
-            return await _context.Circles.Include(x => x.Owner).SingleOrDefaultAsync(x => x.Name == name);
+            return await _context.Circles.Include(x => x.Owner).Where(x => x.Name == name).ToListAsync();
         }
 
-        public async Task<Circle> GetByOwnerIdAsync(int ownerId)
+        public async Task<List<Circle>> GetByOwnerIdAsync(int ownerId)
         {
-            return await _context.Circles.Include(x => x.Owner).SingleOrDefaultAsync(x => x.Owner.Id == ownerId);
+            return await _context.Circles.Include(x => x.Owner).Where(x => x.OwnerId == ownerId).ToListAsync();
         }
 
         public Task UpdateAsync(Circle circle)

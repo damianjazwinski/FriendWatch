@@ -370,3 +370,5 @@ obj/
 # Common node modules locations
 /node_modules
 /wwwroot/node_modules
+/FriendWatch.Infrastructure/Persistence/Migrations/HowToMakeMigrations.txt
+/FriendWatch/files/circles

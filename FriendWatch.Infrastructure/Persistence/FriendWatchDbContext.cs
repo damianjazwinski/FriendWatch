@@ -60,6 +60,10 @@ namespace FriendWatch.Infrastructure.Persistence
                 .HasForeignKey(invitation => invitation.CircleId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<Circle>()
+                .HasIndex(circle => new { circle.Name, circle.OwnerId })
+                .IsUnique();
+
 
         }
 

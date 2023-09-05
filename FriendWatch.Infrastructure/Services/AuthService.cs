@@ -29,14 +29,16 @@ namespace FriendWatch.Infrastructure.Services
         {
             var user = await _userRepository.GetByUsernameAsync(userDto.Username);
 
+            const string errorMessage = "Username or password incorrect";
+
             if (user is null)
             {
-                return new ServiceResponse<(string, string)>(false);
+                return new ServiceResponse<(string, string)>(false, message: errorMessage);
             }
 
             if (!BCrypt.Net.BCrypt.Verify(userDto.Password, user.PasswordHash))
             {
-                return new ServiceResponse<(string, string)>(false);
+                return new ServiceResponse<(string, string)>(false, message: errorMessage);
             }
 
             return new ServiceResponse<(string, string)>(true, GenerateJSONWebToken(user));
