@@ -74,6 +74,7 @@ namespace FriendWatch.Controllers
             return Ok();
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<AuthResponse>> Login(LoginRequest request)
         {

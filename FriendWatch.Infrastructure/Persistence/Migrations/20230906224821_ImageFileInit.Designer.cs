@@ -4,6 +4,7 @@ using FriendWatch.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FriendWatch.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(FriendWatchDbContext))]
-    partial class FriendWatchDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230906224821_ImageFileInit")]
+    partial class ImageFileInit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,9 +51,6 @@ namespace FriendWatch.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ImageFileId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -62,10 +62,6 @@ namespace FriendWatch.Infrastructure.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ImageFileId")
-                        .IsUnique()
-                        .HasFilter("[ImageFileId] IS NOT NULL");
 
                     b.HasIndex("OwnerId");
 
@@ -176,18 +172,11 @@ namespace FriendWatch.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("FriendWatch.Domain.Entities.Circle", b =>
                 {
-                    b.HasOne("FriendWatch.Domain.Entities.ImageFile", "ImageFile")
-                        .WithOne()
-                        .HasForeignKey("FriendWatch.Domain.Entities.Circle", "ImageFileId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.HasOne("FriendWatch.Domain.Entities.User", "Owner")
                         .WithMany("OwnedCircles")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("ImageFile");
 
                     b.Navigation("Owner");
                 });

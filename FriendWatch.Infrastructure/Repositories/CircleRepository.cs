@@ -8,7 +8,7 @@ namespace FriendWatch.Infrastructure.Repositories
     public class CircleRepository : ICircleRepository
     {
         private readonly FriendWatchDbContext _context;
-        public CircleRepository(FriendWatchDbContext context) 
+        public CircleRepository(FriendWatchDbContext context)
         {
             _context = context;
         }
@@ -26,22 +26,22 @@ namespace FriendWatch.Infrastructure.Repositories
 
         public async Task<Circle?> GetByIdAsync(int id)
         {
-            return await _context.Circles.Include(x => x.Owner).SingleOrDefaultAsync(x => x.Id == id);
-        }        
-        
+            return await _context.Circles.Include(x => x.ImageFile).Include(x => x.Owner).SingleOrDefaultAsync(x => x.Id == id);
+        }
+
         public async Task<Circle?> GetByOwnerIdAndNameAsync(int ownerId, string name)
         {
-            return await _context.Circles.Include(x => x.Owner).SingleOrDefaultAsync(x => x.OwnerId == ownerId && x.Name == name);
+            return await _context.Circles.Include(x => x.ImageFile).Include(x => x.Owner).SingleOrDefaultAsync(x => x.OwnerId == ownerId && x.Name == name);
         }
 
         public async Task<List<Circle>> GetByNameAsync(string name)
         {
-            return await _context.Circles.Include(x => x.Owner).Where(x => x.Name == name).ToListAsync();
+            return await _context.Circles.Include(x => x.ImageFile).Include(x => x.Owner).Where(x => x.Name == name).ToListAsync();
         }
 
         public async Task<List<Circle>> GetByOwnerIdAsync(int ownerId)
         {
-            return await _context.Circles.Include(x => x.Owner).Where(x => x.OwnerId == ownerId).ToListAsync();
+            return await _context.Circles.Include(x => x.ImageFile).Include(x => x.Owner).Where(x => x.OwnerId == ownerId).ToListAsync();
         }
 
         public Task UpdateAsync(Circle circle)

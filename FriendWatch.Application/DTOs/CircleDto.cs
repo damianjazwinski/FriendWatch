@@ -12,10 +12,6 @@ namespace FriendWatch.Application.DTOs
 
         public string Name { get; set; } = string.Empty;
 
-        public byte[]? Image { get; set; }
-
-        public string? Extension { get; set; }
-
-        public string? ImagePath { get; set; }
+        public ImageFileDto? ImageFile { get; set; }
     }
 }

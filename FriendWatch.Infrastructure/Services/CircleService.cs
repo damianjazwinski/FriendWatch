@@ -10,11 +10,14 @@ namespace FriendWatch.Infrastructure.Services
     {
         private readonly ICircleRepository _circleRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IImageFileRepository _imageFileRepository;
 
-        public CircleService(ICircleRepository circleRepository, IUserRepository userRepository)
+        public CircleService(ICircleRepository circleRepository, IUserRepository userRepository,
+            IImageFileRepository imageFileRepository)
         {
             _circleRepository = circleRepository;
             _userRepository = userRepository;
+            _imageFileRepository = imageFileRepository;
         }
 
         public async Task<ServiceResponse<CircleDto>> CreateCircleAsync(CircleDto circleDto, int currentUserId)
@@ -32,18 +35,32 @@ namespace FriendWatch.Infrastructure.Services
                 OwnerId = currentUserId
             };
 
-            await _circleRepository.CreateAsync(circle);
 
-            if(circleDto.Image != null)
+            if (circleDto.ImageFile?.Data != null)
             {
+                var fileExtension = Path.GetExtension(circleDto.ImageFile.FileName);
                 var directoryInfo = Directory.CreateDirectory(@"files\circles");
-                var fullPathWithName = Path.Combine(directoryInfo.ToString(), $"{circle.Id}{circleDto.Extension}");
+                var generatedFileName = $"{Path.ChangeExtension(Path.GetRandomFileName(), fileExtension)}";
+                var fullPathWithName = Path.Combine(directoryInfo.ToString(), generatedFileName);
+
+                circleDto.ImageFile.Path = fullPathWithName;
+                circleDto.ImageFile.FileName = generatedFileName;
+
                 using (var stream = File.Create(fullPathWithName))
                 {
-                    await stream.WriteAsync(circleDto.Image, 0, circleDto.Image.Length);
+                    await stream.WriteAsync(circleDto.ImageFile.Data, 0, circleDto.ImageFile.Data.Length);
                 }
-            }
-            
+
+                circle.ImageFile = new ImageFile
+                {
+                    FileName = generatedFileName,
+                    ContentType = circleDto.ImageFile.ContentType!,
+                    Path = Path.Combine("files\\circles", generatedFileName)
+                };
+            };
+
+            await _circleRepository.CreateAsync(circle);
+
             return new ServiceResponse<CircleDto>(true, null);
         }
 
@@ -51,16 +68,26 @@ namespace FriendWatch.Infrastructure.Services
         {
             var user = await _userRepository.GetByIdAsync(currentUserId);
             var joinedCircles = user.Circles;
-            var joinedCirclesDto = joinedCircles.Select(circle => new CircleDto { Name = circle.Name }).ToList();
+            var joinedCirclesDto = joinedCircles.Select(circle =>
+            new CircleDto
+            {
+                Name = circle.Name,
+                ImageFile = circle.ImageFile != null ? new ImageFileDto { Url = $"/api/download/{circle.ImageFile.FileName}" } : null
+            }).ToList();
 
             return new ServiceResponse<List<CircleDto>>(true, joinedCirclesDto);
         }
 
         public async Task<ServiceResponse<List<CircleDto>>> GetOwnedCirclesAsync(int currentUserId)
         {
-            var user = await _userRepository.GetByIdAsync(currentUserId);
-            var ownedCircles = user.OwnedCircles;
-            var ownedCirclesDto = ownedCircles.Select(circle => new CircleDto { Id = circle.Id, Name = circle.Name, ImagePath = $"files/circles/{circle.Id}.jpg" }).ToList(); // TODO: Don't hardcode extension!!!
+            var ownedCircles = await _circleRepository.GetByOwnerIdAsync(currentUserId);
+            var ownedCirclesDto = ownedCircles.Select(circle =>
+            new CircleDto
+            {
+                Id = circle.Id,
+                Name = circle.Name,
+                ImageFile = circle.ImageFile != null ? new ImageFileDto { Url = $"/api/download/{circle.ImageFile.FileName}" } : null
+            }).ToList();
 
             return new ServiceResponse<List<CircleDto>>(true, ownedCirclesDto);
         }

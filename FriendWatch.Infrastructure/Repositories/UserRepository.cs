@@ -29,6 +29,7 @@ namespace FriendWatch.Infrastructure.Repositories
         {
             var user = await _context.Users
                 .Include(x => x.Circles)
+                .ThenInclude(x => x.ImageFile)
                 .Include(x => x.OwnedCircles)
                 .Include(x => x.ReceivedInvitations)
                 .SingleOrDefaultAsync(x => x.Id == id);

@@ -64,11 +64,19 @@ namespace FriendWatch.Infrastructure.Persistence
                 .HasIndex(circle => new { circle.Name, circle.OwnerId })
                 .IsUnique();
 
+            modelBuilder.Entity<Circle>()
+                .HasOne(circle => circle.ImageFile)
+                .WithOne()
+                .IsRequired(false)
+                .HasForeignKey<Circle>(circle => circle.ImageFileId)
+                .OnDelete(DeleteBehavior.NoAction);
+
 
         }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Circle> Circles { get; set; }
         public DbSet<Invitation> Invitations { get; set; }
+        public DbSet<ImageFile> ImageFiles { get; set; }
     }
 }

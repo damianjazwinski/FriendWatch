@@ -12,13 +12,17 @@ using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.Net.Http.Headers;
 using Microsoft.AspNetCore.Authorization;
 using FriendWatch.Middlewares;
+using Microsoft.Extensions.FileProviders;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using FriendWatch;
 
 const string myCorsOriginName = "allowReactApp";
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddCors(options => options
-    .AddPolicy(name: myCorsOriginName, policy => policy.WithOrigins("https://localhost", "https://192.168.0.102").AllowAnyMethod().AllowAnyHeader().AllowCredentials()));
+    .AddPolicy(name: myCorsOriginName, policy => policy.WithOrigins("https://localhost").AllowAnyMethod().AllowAnyHeader().AllowCredentials()));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -70,6 +74,8 @@ builder.Services.AddScoped<ICircleRepository, CircleRepository>();
 builder.Services.AddScoped<ICircleService, CircleService>();
 builder.Services.AddScoped<IInvitationRepository, InvitationRepository>();
 builder.Services.AddScoped<IInvitationService, InvitationService>();
+builder.Services.AddScoped<IImageFileRepository, ImageFileRepository>();
+builder.Services.AddScoped<IImageFileService, ImageFileService>();
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
@@ -88,7 +94,5 @@ app.UseAuthorization();
 app.UseCors(myCorsOriginName);
 
 app.MapControllers();
-
-//app.UseMiddleware<RefreshTokenMiddleware>();
 
 app.Run();

@@ -1,8 +1,11 @@
-﻿namespace FriendWatch.DTOs.Requests
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FriendWatch.DTOs.Requests
 {
     public record CreateCircleRequest
     {
-        public string Name { get; set; }
+        [Required]
+        public string Name { get; set; } = string.Empty;
 
         public IFormFile? Image { get; set; }
     }
