@@ -26,7 +26,7 @@ namespace FriendWatch.Infrastructure.Repositories
 
         public async Task<Circle?> GetByIdAsync(int id)
         {
-            return await _context.Circles.Include(x => x.ImageFile).Include(x => x.Owner).SingleOrDefaultAsync(x => x.Id == id);
+            return await _context.Circles.Include(x => x.ImageFile).Include(x => x.Owner).Include(x => x.Members).SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Circle?> GetByOwnerIdAndNameAsync(int ownerId, string name)

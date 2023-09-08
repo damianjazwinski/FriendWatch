@@ -13,5 +13,7 @@ namespace FriendWatch.Application.DTOs
         public string Name { get; set; } = string.Empty;
 
         public ImageFileDto? ImageFile { get; set; }
+
+        public List<UserDto>? Members { get; set; } = new List<UserDto>();
     }
 }

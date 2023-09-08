@@ -8,5 +8,6 @@ namespace FriendWatch.Application.Services
         Task<ServiceResponse<CircleDto>> CreateCircleAsync(CircleDto circleDto, int currentUserId);
         Task<ServiceResponse<List<CircleDto>>> GetOwnedCirclesAsync(int currentUserId);
         Task<ServiceResponse<List<CircleDto>>> GetJoinedCirclesAsync(int currentUserId);
+        Task<ServiceResponse<CircleDto>> GetByIdWithMembersAsync(int id, int currentUserId);
     }
 }
