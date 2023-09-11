@@ -74,7 +74,7 @@ namespace FriendWatch.Infrastructure.Persistence
             modelBuilder.Entity<Invitation>()
                 .HasOne(invitation => invitation.Receiver)
                 .WithMany(user => user.ReceivedInvitations)
-                .IsRequired(false)
+                .IsRequired(true)
                 .HasForeignKey(invitation => invitation.ReceiverId)
                 .OnDelete(DeleteBehavior.NoAction);
 

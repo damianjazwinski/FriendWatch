@@ -44,9 +44,15 @@ namespace FriendWatch.Infrastructure.Repositories
             return await _context.Circles.Include(x => x.ImageFile).Include(x => x.Owner).Where(x => x.OwnerId == ownerId).ToListAsync();
         }
 
-        public Task UpdateAsync(Circle circle)
+        public async Task UpdateAsync(Circle circle)
         {
-            throw new NotImplementedException();
+            _context.Circles.Update(circle);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<Circle>> GetJoinedAsync(int currentUserId)
+        {
+            return await _context.Circles.Include(x => x.Owner).Include(y => y.Members).Where(circle => circle.Members.Any(member => member.Id == currentUserId)).ToListAsync();
         }
     }
 }

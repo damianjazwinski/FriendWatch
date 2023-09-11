@@ -87,11 +87,16 @@ namespace FriendWatch.Infrastructure.Services
 
         public async Task<ServiceResponse<List<CircleDto>>> GetJoinedCirclesAsync(int currentUserId)
         {
-            var user = await _userRepository.GetByIdAsync(currentUserId); // TODO: Change on Circle repo method
-            var joinedCircles = user.Circles;
+            var joinedCircles = await _circleRepository.GetJoinedAsync(currentUserId);
             var joinedCirclesDto = joinedCircles.Select(circle =>
             new CircleDto
             {
+                Id = circle.Id,
+                CircleOwner = new UserDto 
+                { 
+                    Id = circle.OwnerId, 
+                    Username = circle.Owner.Username 
+                },
                 Name = circle.Name,
                 ImageFile = circle.ImageFile != null ? new ImageFileDto { Url = $"/api/download/{circle.ImageFile.FileName}" } : null
             }).ToList();

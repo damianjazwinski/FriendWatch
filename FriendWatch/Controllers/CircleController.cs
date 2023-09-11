@@ -52,6 +52,19 @@ namespace FriendWatch.Controllers
             return Ok(new GetOwnedCirclesResponse { OwnedCircles = result.Data! });
         }
 
+        [Authorize]
+        [HttpGet("joined")]
+        public async Task<IActionResult> GetJoined()
+        {
+            var currentUserId = HttpContext.User.Claims.GetUserId();
+            var getJoinedCirclesResponse = await _circleService.GetJoinedCirclesAsync(currentUserId);
+
+            if (!getJoinedCirclesResponse.IsSuccess)
+                return BadRequest(new ErrorResponse(getJoinedCirclesResponse.Message!));
+
+            return Ok(new GetJoinedCirclesResponse { JoinedCircles = getJoinedCirclesResponse.Data! });
+        }
+
 
         [Authorize]
         [HttpPost]

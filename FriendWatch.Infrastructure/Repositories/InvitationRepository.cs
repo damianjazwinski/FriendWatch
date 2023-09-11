@@ -33,5 +33,36 @@ namespace FriendWatch.Infrastructure.Repositories
                 .ThenInclude(y => y.Owner)
                 .SingleOrDefaultAsync(invitation => invitation.Id == id);
         }
+
+        public async Task<List<Invitation>> GetByReceiverIdAsync(int currentUserId)
+        {
+            return await _context.Invitations
+                .Include(x => x.Circle)
+                .ThenInclude(y => y.Owner)
+                .Where(invitation => invitation.ReceiverId == currentUserId)
+                .ToListAsync();
+        }
+
+        public async Task<List<Invitation>> GetBySenderIdAsync(int currentUserId)
+        {
+            return await _context.Invitations
+                .Include(x => x.Circle)
+                .ThenInclude(y => y.Owner)
+                .Include(x => x.Receiver)
+                .Where(invitation => invitation.Circle.OwnerId == currentUserId)
+                .ToListAsync();
+        }
+
+        public async Task UpdateAsync(Invitation invitation)
+        {
+            _context.Invitations.Update(invitation);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(Invitation invitation)
+        {
+            _context.Invitations.Remove(invitation);
+            await _context.SaveChangesAsync();
+        }
     }
 }

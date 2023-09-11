@@ -1,5 +1,9 @@
-﻿using FriendWatch.Application.DTOs;
+﻿using System.ComponentModel.DataAnnotations;
+
+using FriendWatch.Application.DTOs;
+using FriendWatch.Application.Extensions;
 using FriendWatch.Application.Services;
+using FriendWatch.Domain.Common;
 using FriendWatch.DTOs.Requests;
 using FriendWatch.DTOs.Responses;
 
@@ -22,37 +26,12 @@ namespace FriendWatch.Controllers
         }
 
         [Authorize]
-        [HttpPost("create/link")]
-        public async Task<IActionResult> CreateInvitationLink(GetCircleInvitationLinkRequest request)
-        {
-            var invitationDtoRequest = new InvitationDto
-            {
-                Message = request.Message,
-                CircleId = request.CircleId
-            };
-
-            var serviceResponse = await _invitationService.CreateInvitationAsync(invitationDtoRequest);
-
-            if (!serviceResponse.IsSuccess)
-                return BadRequest(new ErrorResponse(serviceResponse.Message!));
-
-            var invitationDtoResponse = serviceResponse.Data;
-
-            var uriBuilder = new UriBuilder();
-            uriBuilder.Scheme = Uri.UriSchemeHttps;
-            uriBuilder.Path = "invitation/link";
-            uriBuilder.Host = "localhost";
-            uriBuilder.Query = $"id={invitationDtoResponse!.InvitationId}";
-
-            var invitationLink = uriBuilder.Uri.ToString();
-
-            return Ok(new { Link = invitationLink});
-        }
-
-        [Authorize]
         [HttpPost("create")]
         public async Task<IActionResult> CreateInvitation(CircleInvitationRequest request)
         {
+            if (request.ReceiverUsername == HttpContext.User.Claims.GetUsername())
+                return BadRequest(new ErrorResponse("You can't invite yourself to circle"));
+
             var getUserResponse = await _userService.GetByUsernameAsync(request.ReceiverUsername);
 
             if (!getUserResponse.IsSuccess)
@@ -70,6 +49,41 @@ namespace FriendWatch.Controllers
 
             if (!createInvitationResponse.IsSuccess)
                 return BadRequest(new ErrorResponse(createInvitationResponse.Message!));
+
+            return Ok(new SuccessResponse());
+        }
+
+        [Authorize]
+        [HttpGet("all")]
+        public async Task<IActionResult> GetInvitations()
+        {
+            var currentUserId = HttpContext.User.Claims.GetUserId();
+            var getSentInvitationsResponse = await _invitationService.GetSentInvitationsAsync(currentUserId);
+
+            if (!getSentInvitationsResponse.IsSuccess)
+                return BadRequest(new ErrorResponse(getSentInvitationsResponse.Message!));
+
+            var getReceivedInvitationsResponse = await _invitationService.GetReceivedInvitationAsync(currentUserId);
+
+            if (!getReceivedInvitationsResponse.IsSuccess)
+                return BadRequest(new ErrorResponse(getReceivedInvitationsResponse.Message!));
+
+            return Ok(new GetUsersInvitationsResponse
+            {
+                SentInvitations = getSentInvitationsResponse.Data!,
+                ReceivedInvitations = getReceivedInvitationsResponse.Data!
+            });
+        }
+
+        [Authorize] 
+        [HttpPost("reply")]
+        public async Task<IActionResult> ReplyToInvitation(ReplyToInvitationRequest request)
+        {
+            var currentUserId = HttpContext.User.Claims.GetUserId();
+            var replyToInvitationResponse = await _invitationService.ReplyToInvitationAsync(request.InvitationId, currentUserId, request.Acceptance);
+
+            if (!replyToInvitationResponse.IsSuccess)
+                return BadRequest(new ErrorResponse(replyToInvitationResponse.Message!));
 
             return Ok(new SuccessResponse());
         }

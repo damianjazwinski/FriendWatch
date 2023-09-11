@@ -11,5 +11,6 @@ namespace FriendWatch.Application.Repositories
         Task CreateAsync(Circle circle);
         Task UpdateAsync(Circle circle);
         Task DeleteAsync(Circle circle);
+        Task<List<Circle>> GetJoinedAsync(int currentUserId);
     }
 }
