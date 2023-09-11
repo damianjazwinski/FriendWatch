@@ -2,6 +2,7 @@
 using FriendWatch.Application.Repositories;
 using FriendWatch.Domain.Entities;
 using FriendWatch.Application.DTOs;
+using FriendWatch.Domain.Common;
 
 namespace FriendWatch.Infrastructure.Services
 {
@@ -14,18 +15,45 @@ namespace FriendWatch.Infrastructure.Services
             _invitationRepository = invitationRepository;    
         }
 
-        public async Task SendInvitationAsync(InvitationDto dto)
+        public async Task<ServiceResponse<InvitationDto>> CreateInvitationAsync(InvitationDto dto)
         {
+            if (dto.ReceiverId != null)
+            {
+                var existingInvitation = await _invitationRepository.GetByCircleIdAndReceiverIdAsync(dto.CircleId, dto.ReceiverId.Value);
+
+                if (existingInvitation != null)
+                    return new ServiceResponse<InvitationDto>(false, null, "Invitation for this user already exists");
+            }
+
             var invitation = new Invitation
             {
                 Message = dto.Message,
                 CircleId = dto.CircleId,
-                ReceiverId = dto.UserId,
+                ReceiverId = dto.ReceiverId,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
 
             await _invitationRepository.CreateAsync(invitation);
+
+            var createdInvitation = await _invitationRepository.GetByIdAsync(invitation.Id);
+
+            if (createdInvitation == null)
+                return new ServiceResponse<InvitationDto>(false, null, "Failed to get invitation");
+
+
+            var createdInvitationDto = new InvitationDto
+            {
+                InvitationId = createdInvitation.Id,
+                CircleId = createdInvitation.CircleId,
+                Message = createdInvitation.Message,
+                ReceiverId = createdInvitation.ReceiverId,
+                InvitationCircleName = createdInvitation.Circle.Name,
+                InvitationCircleOwnerId = createdInvitation.Circle.Owner.Id,
+                InvitationCircleOwnerUsername = createdInvitation.Circle.Owner.Username
+            };
+
+            return new ServiceResponse<InvitationDto>(true, createdInvitationDto);
         }
     }
 }

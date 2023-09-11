@@ -19,5 +19,19 @@ namespace FriendWatch.Infrastructure.Repositories
             await _context.Invitations.AddAsync(invitation);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Invitation?> GetByCircleIdAndReceiverIdAsync(int circleId, int receiverId)
+        {
+            return await _context.Invitations
+                .SingleOrDefaultAsync(invitation => invitation.CircleId == circleId && invitation.ReceiverId == receiverId);
+        }
+
+        public async Task<Invitation?> GetByIdAsync(int id)
+        {
+            return await _context.Invitations
+                .Include(x => x.Circle)
+                .ThenInclude(y => y.Owner)
+                .SingleOrDefaultAsync(invitation => invitation.Id == id);
+        }
     }
 }

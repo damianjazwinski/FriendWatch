@@ -15,5 +15,6 @@ namespace FriendWatch.Application.DTOs
         public ImageFileDto? ImageFile { get; set; }
 
         public List<UserDto>? Members { get; set; } = new List<UserDto>();
+        public UserDto CircleOwner { get; set; }
     }
 }

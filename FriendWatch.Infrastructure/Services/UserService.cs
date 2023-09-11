@@ -57,5 +57,23 @@ namespace FriendWatch.Infrastructure.Services
             var userId = int.Parse(id);
             return GetByIdAsync(userId);
         }
+
+        public async Task<ServiceResponse<UserDto>> GetByUsernameAsync(string username)
+        {
+            var user = await _userRepository.GetByUsernameAsync(username);
+            if (user != null)
+            {
+                var userDto = new UserDto
+                {
+                    Id = user.Id,
+                    Username = user.Username,
+                    Password = null!
+                };
+
+                return new ServiceResponse<UserDto>(true, userDto);
+            }
+
+            return new ServiceResponse<UserDto>(false, null, "User not found");
+        }
     }
 }

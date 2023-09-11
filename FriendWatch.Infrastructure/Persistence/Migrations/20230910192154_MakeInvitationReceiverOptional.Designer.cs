@@ -4,6 +4,7 @@ using FriendWatch.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FriendWatch.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(FriendWatchDbContext))]
-    partial class FriendWatchDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230910192154_MakeInvitationReceiverOptional")]
+    partial class MakeInvitationReceiverOptional
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -128,11 +131,9 @@ namespace FriendWatch.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ReceiverId");
+                    b.HasIndex("CircleId");
 
-                    b.HasIndex("CircleId", "ReceiverId")
-                        .IsUnique()
-                        .HasFilter("[ReceiverId] IS NOT NULL");
+                    b.HasIndex("ReceiverId");
 
                     b.ToTable("Invitations");
                 });

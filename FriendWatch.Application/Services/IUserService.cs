@@ -9,5 +9,6 @@ namespace FriendWatch.Application.Services
         Task<ServiceResponse<UserDto>> CreateUserAsync(UserDto userDto);
         Task<ServiceResponse<UserDto>> GetByIdAsync(int id);
         Task<ServiceResponse<UserDto>> GetByIdAsync(string id);
+        Task<ServiceResponse<UserDto>> GetByUsernameAsync(string username);
     }
 }

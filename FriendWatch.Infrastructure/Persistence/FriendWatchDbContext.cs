@@ -71,7 +71,16 @@ namespace FriendWatch.Infrastructure.Persistence
                 .HasForeignKey<Circle>(circle => circle.ImageFileId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<Invitation>()
+                .HasOne(invitation => invitation.Receiver)
+                .WithMany(user => user.ReceivedInvitations)
+                .IsRequired(false)
+                .HasForeignKey(invitation => invitation.ReceiverId)
+                .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<Invitation>()
+                .HasIndex(invitation => new { invitation.CircleId, invitation.ReceiverId })
+                .IsUnique();
         }
 
         public DbSet<User> Users { get; set; }

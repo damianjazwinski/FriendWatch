@@ -6,10 +6,14 @@ using System.Threading.Tasks;
 
 namespace FriendWatch.Application.DTOs
 {
-    public class InvitationDto
+    public record InvitationDto
     {
-        public string? Message { get; set; }
-        public int UserId { get; set; }
         public int CircleId { get; set; }
+        public int? InvitationId { get; set; }
+        public string? Message { get; set; }
+        public int? ReceiverId { get; set; }
+        public string? InvitationCircleName { get; set; }
+        public int? InvitationCircleOwnerId { get; set; }
+        public string? InvitationCircleOwnerUsername { get; set; }
     }
 }
