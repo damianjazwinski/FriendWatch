@@ -28,7 +28,20 @@ namespace FriendWatch.Controllers
 
         [Authorize]
         [HttpGet("owned/{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetOwnedCircle(int id)
+        {
+            var currentUserId = HttpContext.User.Claims.GetUserId();
+            var result = await _circleService.GetByIdWithMembersAsync(id, currentUserId);
+
+            if (!result.IsSuccess)
+                return BadRequest(new ErrorResponse(result.Message!));
+
+            return Ok(new GetCircleWithMembers { Circle = result.Data! });
+        }
+
+        [Authorize]
+        [HttpGet("joined/{id}")]
+        public async Task<IActionResult> GetJoinedCircle(int id)
         {
             var currentUserId = HttpContext.User.Claims.GetUserId();
             var result = await _circleService.GetByIdWithMembersAsync(id, currentUserId);

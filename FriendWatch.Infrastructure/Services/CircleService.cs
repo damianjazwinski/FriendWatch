@@ -71,9 +71,6 @@ namespace FriendWatch.Infrastructure.Services
             if (circle == null)
                 return new ServiceResponse<CircleDto>(false, null, "Circle not found");
 
-            if (circle.OwnerId != currentUserId)
-                return new ServiceResponse<CircleDto>(false, null, "Failed to get circle");
-
             var circleDto = new CircleDto
             {
                 Id = circle.Id,

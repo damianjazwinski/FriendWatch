@@ -23,27 +23,35 @@ namespace FriendWatch.Infrastructure.Services
             _userRepository = userRepository;
         }
 
-        public async Task<ServiceResponse<InvitationDto>> CreateInvitationAsync(InvitationDto dto)
+        public async Task<ServiceResponse<InvitationDto>> CreateInvitationAsync(InvitationDto invitationDto)
         {
-            var existingInvitation = await _invitationRepository.GetByCircleIdAndReceiverIdAsync(dto.CircleId, dto.ReceiverId);
+            var existingInvitation = await _invitationRepository.GetByCircleIdAndReceiverIdAsync(invitationDto.CircleId, invitationDto.ReceiverId);
 
             if (existingInvitation != null)
                 return new ServiceResponse<InvitationDto>(false, null, "Invitation for this user already exists");
 
+            var circle = await _circleRepository.GetByIdAsync(invitationDto.CircleId);
+
+            if (circle == null)
+                return new ServiceResponse<InvitationDto>(false, null, "Failed to load circle");
+
+            if(circle.Members.Exists(member => member.Id == invitationDto.ReceiverId))
+                return new ServiceResponse<InvitationDto>(false, null, "User is already a member");
+
             var invitation = new Invitation
             {
-                Message = dto.Message,
-                CircleId = dto.CircleId,
-                ReceiverId = dto.ReceiverId,
+                Message = invitationDto.Message,
+                CircleId = invitationDto.CircleId,
+                ReceiverId = invitationDto.ReceiverId,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
 
             await _invitationRepository.CreateAsync(invitation);
 
-            dto.InvitationId = invitation.Id;
+            invitationDto.InvitationId = invitation.Id;
 
-            return new ServiceResponse<InvitationDto>(true, dto);
+            return new ServiceResponse<InvitationDto>(true, invitationDto);
         }
 
         public async Task<ServiceResponse<List<InvitationDto>>> GetReceivedInvitationAsync(int currentUserId)
