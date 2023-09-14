@@ -3,6 +3,7 @@ using FriendWatch.Application.Repositories;
 using FriendWatch.Domain.Entities;
 using FriendWatch.Application.DTOs;
 using FriendWatch.Domain.Common;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace FriendWatch.Infrastructure.Services
 {
@@ -58,6 +59,10 @@ namespace FriendWatch.Infrastructure.Services
                     Path = Path.Combine("files\\circles", generatedFileName)
                 };
             };
+
+            var user = await _userRepository.GetByIdAsync(currentUserId);
+
+            circle.Members = new List<User> { user };
 
             await _circleRepository.CreateAsync(circle);
 
