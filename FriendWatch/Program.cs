@@ -76,6 +76,8 @@ builder.Services.AddScoped<IInvitationRepository, InvitationRepository>();
 builder.Services.AddScoped<IInvitationService, InvitationService>();
 builder.Services.AddScoped<IImageFileRepository, ImageFileRepository>();
 builder.Services.AddScoped<IImageFileService, ImageFileService>();
+builder.Services.AddScoped<IWatchService, WatchService>();
+builder.Services.AddScoped<IWatchRepository, WatchRepository>();
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();

@@ -49,6 +49,7 @@ namespace FriendWatch.Infrastructure.Persistence
 
             #endregion
 
+            #region Circle
             modelBuilder.Entity<Circle>()
                 .HasOne(circle => circle.Owner)
                 .WithMany(owner => owner.OwnedCircles)
@@ -70,7 +71,9 @@ namespace FriendWatch.Infrastructure.Persistence
                 .IsRequired(false)
                 .HasForeignKey<Circle>(circle => circle.ImageFileId)
                 .OnDelete(DeleteBehavior.NoAction);
+            #endregion
 
+            #region Invitation
             modelBuilder.Entity<Invitation>()
                 .HasOne(invitation => invitation.Receiver)
                 .WithMany(user => user.ReceivedInvitations)
@@ -81,11 +84,30 @@ namespace FriendWatch.Infrastructure.Persistence
             modelBuilder.Entity<Invitation>()
                 .HasIndex(invitation => new { invitation.CircleId, invitation.ReceiverId })
                 .IsUnique();
+            #endregion
+
+            #region Watch
+            modelBuilder.Entity<Watch>()
+                .HasOne(watch => watch.Creator)
+                .WithMany()
+                .IsRequired()
+                .HasForeignKey(watch => watch.CreatorId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Watch>()
+                .HasOne(watch => watch.Circle)
+                .WithMany()
+                .IsRequired()
+                .HasForeignKey(watch => watch.CircleId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            #endregion
         }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Circle> Circles { get; set; }
         public DbSet<Invitation> Invitations { get; set; }
         public DbSet<ImageFile> ImageFiles { get; set; }
+        public DbSet<Watch> Watches { get; set; }
     }
 }
