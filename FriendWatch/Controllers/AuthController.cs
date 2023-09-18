@@ -60,7 +60,7 @@ namespace FriendWatch.Controllers
         {
             // TODO: Add confirmation validation logic
 
-            var userDto = new UserDto
+            var userDto = new UserRequestDto
             {
                 Username = request.Username,
                 Password = request.Password
@@ -78,7 +78,7 @@ namespace FriendWatch.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<AuthResponse>> Login(LoginRequest request)
         {
-            var userDto = new UserDto
+            var userDto = new UserRequestDto
             {
                 Username = request.Username,
                 Password = request.Password
@@ -87,7 +87,7 @@ namespace FriendWatch.Controllers
             var loginResult = await _authService.Login(userDto);
 
             if (!loginResult.IsSuccess)
-                return BadRequest(new ErrorResponse { Messages = new string[] { loginResult.Message } });
+                return BadRequest(new ErrorResponse(loginResult.Message!));
 
 
 

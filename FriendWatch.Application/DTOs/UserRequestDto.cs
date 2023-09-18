@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace FriendWatch.Application.DTOs
 {
-    public class UserDto
+    public class UserRequestDto
     {
         public int Id { get; set; }
         public string Username { get; set; }
+        public string Password { get; set; }
     }
 }

@@ -9,6 +9,8 @@ using FriendWatch.Application.Repositories;
 using FriendWatch.Domain.Entities;
 using FriendWatch.Infrastructure.Persistence;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace FriendWatch.Infrastructure.Repositories
 {
     public class WatchRepository : IWatchRepository
@@ -24,6 +26,20 @@ namespace FriendWatch.Infrastructure.Repositories
         {
             await _context.Watches.AddAsync(watch);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<Watch>> GetByUserIdAsync(int currentUserId)
+        {
+            return await _context.Watches
+                .Include(x => x.Creator)
+                .Include(x => x.Comments)
+                .ThenInclude(y => y.Commenter)
+                .Include(x => x.Circle)
+                .ThenInclude(y => y.Members)
+                .Where(x => x.Circle.Members.Any(y => y.Id == currentUserId))
+                .OrderByDescending(x => x.CreatedAt)
+                .ToListAsync();
+
         }
     }
 }

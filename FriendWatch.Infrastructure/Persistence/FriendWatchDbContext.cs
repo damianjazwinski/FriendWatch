@@ -102,6 +102,21 @@ namespace FriendWatch.Infrastructure.Persistence
                 .OnDelete(DeleteBehavior.NoAction);
 
             #endregion
+
+            #region Comment
+            modelBuilder.Entity<Comment>()
+                .HasOne(comment => comment.Watch)
+                .WithMany(watch => watch.Comments)
+                .HasForeignKey(comment => comment.WatchId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Comment>()
+                .HasOne(comment => comment.Commenter)
+                .WithMany()
+                .IsRequired()
+                .HasForeignKey(comment => comment.CommenterId)
+                .OnDelete(DeleteBehavior.NoAction);
+            #endregion
         }
 
         public DbSet<User> Users { get; set; }
@@ -109,5 +124,6 @@ namespace FriendWatch.Infrastructure.Persistence
         public DbSet<Invitation> Invitations { get; set; }
         public DbSet<ImageFile> ImageFiles { get; set; }
         public DbSet<Watch> Watches { get; set; }
+        public DbSet<Comment> Comments  { get; set; }
     }
 }

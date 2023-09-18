@@ -16,6 +16,7 @@ namespace FriendWatch.Domain.Entities
         public string Message { get; set; } = string.Empty;
         public string? ExternalLink { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set;}
+        public DateTime UpdatedAt { get; set; }
+        public List<Comment> Comments { get; set; }
     }
 }

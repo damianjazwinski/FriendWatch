@@ -25,7 +25,7 @@ namespace FriendWatch.Infrastructure.Services
             _configuration = configuration;
         }
 
-        public async Task<ServiceResponse<(string, string)>> Login(UserDto userDto)
+        public async Task<ServiceResponse<(string, string)>> Login(UserRequestDto userDto)
         {
             var user = await _userRepository.GetByUsernameAsync(userDto.Username);
 

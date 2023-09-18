@@ -17,7 +17,7 @@ namespace FriendWatch.Infrastructure.Services
         {
             _userRepository = userRepository;
         }
-        public async Task<ServiceResponse<UserDto>> CreateUserAsync(UserDto userDto)
+        public async Task<ServiceResponse<UserDto>> CreateUserAsync(UserRequestDto userDto)
         {
             // check for already existing user with given username
             var existingUser = await _userRepository.GetByUsernameAsync(userDto.Username);
@@ -43,7 +43,6 @@ namespace FriendWatch.Infrastructure.Services
                 {
                     Id = user.Id,
                     Username = user.Username,
-                    Password = null!
                 };
 
                 return new ServiceResponse<UserDto>(true, userDto);
@@ -67,7 +66,6 @@ namespace FriendWatch.Infrastructure.Services
                 {
                     Id = user.Id,
                     Username = user.Username,
-                    Password = null!
                 };
 
                 return new ServiceResponse<UserDto>(true, userDto);

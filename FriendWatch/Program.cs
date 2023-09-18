@@ -16,6 +16,8 @@ using Microsoft.Extensions.FileProviders;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using FriendWatch;
+using System.ComponentModel;
+using FriendWatch.Utils;
 
 const string myCorsOriginName = "allowReactApp";
 var builder = WebApplication.CreateBuilder(args);
@@ -78,7 +80,12 @@ builder.Services.AddScoped<IImageFileRepository, ImageFileRepository>();
 builder.Services.AddScoped<IImageFileService, ImageFileService>();
 builder.Services.AddScoped<IWatchService, WatchService>();
 builder.Services.AddScoped<IWatchRepository, WatchRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new DateTimeJsonConverter());
+});
 
 var app = builder.Build();
 

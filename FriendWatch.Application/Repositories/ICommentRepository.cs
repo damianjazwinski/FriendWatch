@@ -8,9 +8,8 @@ using FriendWatch.Domain.Entities;
 
 namespace FriendWatch.Application.Repositories
 {
-    public interface IWatchRepository
+    public interface ICommentRepository
     {
-        Task CreateAsync(Watch watch);
-        Task<List<Watch>> GetByUserIdAsync(int currentUserId);
+        Task CreateAsync(Comment comment);
     }
 }

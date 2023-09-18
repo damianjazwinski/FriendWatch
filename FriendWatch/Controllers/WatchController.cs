@@ -42,5 +42,54 @@ namespace FriendWatch.Controllers
 
             return Ok(new SuccessResponse());
         }
+
+        [Authorize]
+        [HttpPost("comment")]
+        public async Task<IActionResult> CommentWatch(CommentWatchRequest request)
+        {
+            var currentUserId = HttpContext.User.Claims.GetUserId();
+
+            var commentDto = new CommentDto
+            {
+                CommenterId = currentUserId,
+                Content = request.Content,
+                WatchId = request.WatchId,
+            };
+
+            var result = await _watchService.AddCommentToWatch(commentDto);
+
+            if (!result.IsSuccess)
+                return BadRequest(new ErrorResponse(result.Message!));
+
+            return Ok(new SuccessResponse());
+        }
+
+        [Authorize]
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAll()
+        {
+            var currentUserId = HttpContext.User.Claims.GetUserId();
+
+            var result = await _watchService.GetAllWatchesForUserAsync(currentUserId);
+
+            if (!result.IsSuccess)
+                return BadRequest(new ErrorResponse(result.Message!));
+
+
+            return Ok(new GetUserWatchesResponse { Watches = result.Data!.Select(watch => new WatchResponseDto
+            {
+                WatchId = watch.Id!.Value,
+                CircleId = watch.CircleId,
+                CircleName = watch.Circle!.Name,
+                Message = watch.Message,
+                ExternalLink = watch.ExternalLink,
+                CreatorId = watch.CreatorId,
+                CreatorName = watch.Creator!.Username,
+                CreatedAt = watch.CreatedAt!.Value,
+                UpdatedAt = watch.UpdatedAt,
+                Comments = watch.Comments,
+            }).ToList() });
+        }
     }
 }
+
