@@ -3,10 +3,12 @@ using FriendWatch.Application.Extensions;
 using FriendWatch.Application.Services;
 using FriendWatch.DTOs.Requests;
 using FriendWatch.DTOs.Responses;
+using FriendWatch.Utils;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace FriendWatch.Controllers
 {
@@ -15,10 +17,12 @@ namespace FriendWatch.Controllers
     public class WatchController : ControllerBase
     {
         private readonly IWatchService _watchService;
+        private readonly IHubContext<CommentsHub> _commentsHubContext;
 
-        public WatchController(IWatchService watchService)
+        public WatchController(IWatchService watchService, IHubContext<CommentsHub> commentsHubContext)
         {
             _watchService = watchService;
+            _commentsHubContext = commentsHubContext;
         }
 
         [HttpPost]
@@ -61,6 +65,7 @@ namespace FriendWatch.Controllers
             if (!result.IsSuccess)
                 return BadRequest(new ErrorResponse(result.Message!));
 
+            await _commentsHubContext.Clients.All.SendAsync("NewCommentEvent", "Test payload");
             return Ok(new SuccessResponse());
         }
 

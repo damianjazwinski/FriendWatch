@@ -83,7 +83,9 @@ namespace FriendWatch.Infrastructure.Services
                     Id = watch.Creator.Id,
                     Username = watch.Creator.Username,
                 },
-                Comments = watch.Comments.Select(comment => new CommentDto
+                Comments = watch.Comments
+                .OrderByDescending(comment => comment.CreatedAt)
+                .Select(comment => new CommentDto
                 {
                     CommentId = comment.Id,
                     CommenterId = comment.CommenterId,

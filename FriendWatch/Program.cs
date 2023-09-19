@@ -87,6 +87,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.Converters.Add(new DateTimeJsonConverter());
 });
 
+builder.Services.AddSignalR();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -98,10 +99,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
 app.UseAuthorization();
 
 app.UseCors(myCorsOriginName);
 
 app.MapControllers();
+
+app.MapHub<CommentsHub>("commentsHub");
 
 app.Run();
