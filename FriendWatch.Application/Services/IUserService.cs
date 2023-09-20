@@ -10,5 +10,6 @@ namespace FriendWatch.Application.Services
         Task<ServiceResponse<UserDto>> GetByIdAsync(int id);
         Task<ServiceResponse<UserDto>> GetByIdAsync(string id);
         Task<ServiceResponse<UserDto>> GetByUsernameAsync(string username);
+        Task<ServiceResponse<UserDto>> SetUserAvatar(UserDto userDto);
     }
 }

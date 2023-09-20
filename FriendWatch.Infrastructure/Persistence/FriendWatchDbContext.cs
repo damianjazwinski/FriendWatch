@@ -47,6 +47,13 @@ namespace FriendWatch.Infrastructure.Persistence
                 .HasIndex(user => user.Username)
                 .IsUnique();
 
+            modelBuilder.Entity<User>()
+                .HasOne(user => user.Avatar)
+                .WithOne()
+                .IsRequired(false)
+                .HasForeignKey<User>(user => user.AvatarId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             #endregion
 
             #region Circle

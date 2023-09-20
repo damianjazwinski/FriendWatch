@@ -90,6 +90,7 @@ namespace FriendWatch.Controllers
                 ExternalLink = watch.ExternalLink,
                 CreatorId = watch.CreatorId,
                 CreatorName = watch.Creator!.Username,
+                CreatorAvatarUrl = watch.Creator.UserAvatarUrl,
                 CreatedAt = watch.CreatedAt!.Value,
                 UpdatedAt = watch.UpdatedAt,
                 Comments = watch.Comments,

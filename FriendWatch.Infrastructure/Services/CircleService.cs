@@ -40,7 +40,7 @@ namespace FriendWatch.Infrastructure.Services
             if (circleDto.ImageFile?.Data != null)
             {
                 var fileExtension = Path.GetExtension(circleDto.ImageFile.FileName);
-                var directoryInfo = Directory.CreateDirectory(@"files\circles");
+                var directoryInfo = Directory.CreateDirectory(@"files");
                 var generatedFileName = $"{Path.ChangeExtension(Path.GetRandomFileName(), fileExtension)}";
                 var fullPathWithName = Path.Combine(directoryInfo.ToString(), generatedFileName);
 
@@ -56,7 +56,7 @@ namespace FriendWatch.Infrastructure.Services
                 {
                     FileName = generatedFileName,
                     ContentType = circleDto.ImageFile.ContentType!,
-                    Path = Path.Combine("files\\circles", generatedFileName)
+                    Path = Path.Combine("files", generatedFileName)
                 };
             };
 
@@ -81,7 +81,12 @@ namespace FriendWatch.Infrastructure.Services
                 Id = circle.Id,
                 ImageFile = circle.ImageFile != null ? new ImageFileDto { Url = $"/api/download/{circle.ImageFile.FileName}" } : null,
                 Name = circle.Name,
-                Members = circle.Members.Select(member => new UserDto { Id = member.Id, Username = member.Username }).ToList()
+                Members = circle.Members.Select(member => new UserDto 
+                { 
+                    Id = member.Id, 
+                    Username = member.Username, 
+                    UserAvatarUrl = member.Avatar != null ? $"/api/download/{member.Avatar.FileName}" : null 
+                }).ToList()
             };
 
             return new ServiceResponse<CircleDto>(true, circleDto);
@@ -101,7 +106,7 @@ namespace FriendWatch.Infrastructure.Services
                     CircleOwner = new UserDto 
                     { 
                         Id = circle.OwnerId, 
-                        Username = circle.Owner.Username 
+                        Username = circle.Owner.Username, 
                     },
                     Name = circle.Name,
                     ImageFile = circle.ImageFile != null ? new ImageFileDto { Url = $"/api/download/{circle.ImageFile.FileName}" } : null

@@ -82,6 +82,7 @@ namespace FriendWatch.Infrastructure.Services
                 {
                     Id = watch.Creator.Id,
                     Username = watch.Creator.Username,
+                    UserAvatarUrl = watch.Creator.Avatar != null ? $"/api/download/{watch.Creator.Avatar.FileName}" : null
                 },
                 Comments = watch.Comments
                 .OrderByDescending(comment => comment.CreatedAt)
@@ -90,6 +91,7 @@ namespace FriendWatch.Infrastructure.Services
                     CommentId = comment.Id,
                     CommenterId = comment.CommenterId,
                     CommenterName = comment.Commenter.Username,
+                    CommenterAvatarUrl = comment.Commenter.Avatar != null ? $"/api/download/{comment.Commenter.Avatar.FileName}" : null,
                     Content = comment.Content,
                     CreatedAt = comment.CreatedAt,
                     WatchId = comment.WatchId,

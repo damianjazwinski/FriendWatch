@@ -43,6 +43,7 @@ namespace FriendWatch.Infrastructure.Services
                 {
                     Id = user.Id,
                     Username = user.Username,
+                    UserAvatarUrl = user.Avatar != null ? $"/api/download/{user.Avatar.FileName}" : null
                 };
 
                 return new ServiceResponse<UserDto>(true, userDto);
@@ -72,6 +73,44 @@ namespace FriendWatch.Infrastructure.Services
             }
 
             return new ServiceResponse<UserDto>(false, null, "User not found");
+        }
+
+        public async Task<ServiceResponse<UserDto>> SetUserAvatar(UserDto userDto)
+        {
+            var user = await _userRepository.GetByIdAsync(userDto.Id);
+
+            if (user == null)
+                return new ServiceResponse<UserDto>(false, null, "User not found");
+
+            if (userDto.AvatarImageDto == null || userDto.AvatarImageDto.Data == null)
+                return new ServiceResponse<UserDto>(false, null, "Failed to setting avatar");
+
+            var fileExtension = Path.GetExtension(userDto.AvatarImageDto.FileName);
+            var directoryInfo = Directory.CreateDirectory(@"files");
+            var generatedFileName = $"{Path.ChangeExtension(Path.GetRandomFileName(), fileExtension)}";
+            var fullPathWithName = Path.Combine(directoryInfo.ToString(), generatedFileName);
+
+            userDto.AvatarImageDto.Path = fullPathWithName;
+            userDto.AvatarImageDto.FileName = generatedFileName;
+
+            using (var stream = File.Create(fullPathWithName))
+            {
+                await stream.WriteAsync(userDto.AvatarImageDto.Data, 0, userDto.AvatarImageDto.Data.Length);
+            }
+
+            user.Avatar = new ImageFile
+            {
+                FileName = generatedFileName,
+                ContentType = userDto.AvatarImageDto.ContentType!,
+                Path = Path.Combine("files", generatedFileName)
+            };
+            
+
+            await _userRepository.UpdateAsync(user);
+
+            userDto.UserAvatarUrl = $"/api/download/{user.Avatar.FileName}";
+
+            return new ServiceResponse<UserDto>(true, userDto);
         }
     }
 }

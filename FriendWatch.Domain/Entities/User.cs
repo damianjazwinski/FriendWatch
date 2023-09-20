@@ -8,5 +8,7 @@
         public List<Circle> Circles { get; set; }
         public List<Circle> OwnedCircles { get; set; }
         public List<Invitation> ReceivedInvitations { get; set; }
+        public ImageFile? Avatar { get; set; }
+        public int? AvatarId { get; set; }
     }
 }

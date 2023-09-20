@@ -7,9 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="files\circles\**" />
     <Compile Remove="files\NewFolder\**" />
+    <Content Remove="files\circles\**" />
     <Content Remove="files\NewFolder\**" />
+    <EmbeddedResource Remove="files\circles\**" />
     <EmbeddedResource Remove="files\NewFolder\**" />
+    <None Remove="files\circles\**" />
     <None Remove="files\NewFolder\**" />
   </ItemGroup>
 
@@ -36,7 +40,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="files\circles\" />
     <Folder Include="Middlewares\" />
   </ItemGroup>
 

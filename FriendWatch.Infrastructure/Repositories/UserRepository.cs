@@ -16,8 +16,7 @@ namespace FriendWatch.Infrastructure.Repositories
         public async Task CreateAsync(User user)
         {
             await _context.Users.AddAsync(user);
-            _context.SaveChanges();
-            return;
+            await _context.SaveChangesAsync();
         }
 
         public Task<List<User>> GetAllAsync()
@@ -28,6 +27,7 @@ namespace FriendWatch.Infrastructure.Repositories
         public async Task<User> GetByIdAsync(int id)
         {
             var user = await _context.Users
+                .Include(x => x.Avatar)
                 .Include(x => x.Circles)
                 .ThenInclude(x => x.ImageFile)
                 .Include(x => x.OwnedCircles)
@@ -43,9 +43,10 @@ namespace FriendWatch.Infrastructure.Repositories
             return user;
         }
 
-        public Task UpdateAsync(User user)
+        public async Task UpdateAsync(User user)
         {
-            throw new NotImplementedException();
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
         }
 
         public Task DeleteAsync(int id)

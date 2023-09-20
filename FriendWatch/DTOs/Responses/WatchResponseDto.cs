@@ -14,5 +14,6 @@ namespace FriendWatch.DTOs.Responses
         public DateTime? UpdatedAt { get; set; }
         public string CircleName { get; set; } = string.Empty;
         public List<CommentDto> Comments { get; set; } = new();
+        public string? CreatorAvatarUrl { get; set; }
     }
 }

@@ -371,4 +371,4 @@ obj/
 /node_modules
 /wwwroot/node_modules
 /FriendWatch.Infrastructure/Persistence/Migrations/HowToMakeMigrations.txt
-/FriendWatch/files/circles
+/FriendWatch/files
