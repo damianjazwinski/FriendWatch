@@ -24,7 +24,6 @@ namespace FriendWatch.Infrastructure.Repositories
         public async Task<List<Watch>> GetByUserIdAsync(int currentUserId)
         {
             return await _context.Watches
-                //.AsSplitQuery()
                 .Include(x => x.Creator)
                 .ThenInclude(y => y.Avatar)
                 .Include(x => x.Comments)
