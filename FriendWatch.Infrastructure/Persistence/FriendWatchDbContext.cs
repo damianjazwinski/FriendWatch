@@ -16,7 +16,7 @@ namespace FriendWatch.Infrastructure.Persistence
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string conntectionString = _configuration.GetConnectionString("MSSQL") 
+            string conntectionString = _configuration.GetConnectionString("MSSQL")
                 ?? throw new Exception("Error on reading connection string");
 
             base.OnConfiguring(optionsBuilder);
@@ -131,6 +131,6 @@ namespace FriendWatch.Infrastructure.Persistence
         public DbSet<Invitation> Invitations { get; set; }
         public DbSet<ImageFile> ImageFiles { get; set; }
         public DbSet<Watch> Watches { get; set; }
-        public DbSet<Comment> Comments  { get; set; }
+        public DbSet<Comment> Comments { get; set; }
     }
 }

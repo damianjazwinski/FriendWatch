@@ -10,6 +10,6 @@
         public int CircleId { get; set; }
         public Circle Circle { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set;}
+        public DateTime UpdatedAt { get; set; }
     }
 }

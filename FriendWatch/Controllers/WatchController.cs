@@ -6,7 +6,6 @@ using FriendWatch.DTOs.Responses;
 using FriendWatch.Utils;
 
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 
@@ -41,7 +40,7 @@ namespace FriendWatch.Controllers
 
             var result = await _watchService.CreateWatchAsync(watchDto);
 
-            if(!result.IsSuccess)
+            if (!result.IsSuccess)
                 return BadRequest(new ErrorResponse("Failed to create watch"));
 
             return Ok(new SuccessResponse());
@@ -81,20 +80,23 @@ namespace FriendWatch.Controllers
                 return BadRequest(new ErrorResponse(result.Message!));
 
 
-            return Ok(new GetUserWatchesResponse { Watches = result.Data!.Select(watch => new WatchResponseDto
+            return Ok(new GetUserWatchesResponse
             {
-                WatchId = watch.Id!.Value,
-                CircleId = watch.CircleId,
-                CircleName = watch.Circle!.Name,
-                Message = watch.Message,
-                ExternalLink = watch.ExternalLink,
-                CreatorId = watch.CreatorId,
-                CreatorName = watch.Creator!.Username,
-                CreatorAvatarUrl = watch.Creator.UserAvatarUrl,
-                CreatedAt = watch.CreatedAt!.Value,
-                UpdatedAt = watch.UpdatedAt,
-                Comments = watch.Comments,
-            }).ToList() });
+                Watches = result.Data!.Select(watch => new WatchResponseDto
+                {
+                    WatchId = watch.Id!.Value,
+                    CircleId = watch.CircleId,
+                    CircleName = watch.Circle!.Name,
+                    Message = watch.Message,
+                    ExternalLink = watch.ExternalLink,
+                    CreatorId = watch.CreatorId,
+                    CreatorName = watch.Creator!.Username,
+                    CreatorAvatarUrl = watch.Creator.UserAvatarUrl,
+                    CreatedAt = watch.CreatedAt!.Value,
+                    UpdatedAt = watch.UpdatedAt,
+                    Comments = watch.Comments,
+                }).ToList()
+            });
         }
     }
 }

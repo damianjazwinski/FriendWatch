@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using FriendWatch.Application.DTOs;
+﻿using FriendWatch.Application.DTOs;
 using FriendWatch.Application.Repositories;
 using FriendWatch.Application.Services;
 using FriendWatch.Domain.Common;
@@ -24,7 +18,7 @@ namespace FriendWatch.Infrastructure.Services
         {
             var imageFile = await _fileRepository.GetImageFileAsync(name);
 
-            if (imageFile == null) 
+            if (imageFile == null)
                 return new ServiceResponse<ImageFileDto>(false, null, "Image not found");
 
             var imageFileDto = new ImageFileDto

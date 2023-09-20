@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using FriendWatch.Application.DTOs;
+﻿using FriendWatch.Application.DTOs;
 using FriendWatch.Application.Repositories;
 using FriendWatch.Application.Services;
 using FriendWatch.Domain.Common;

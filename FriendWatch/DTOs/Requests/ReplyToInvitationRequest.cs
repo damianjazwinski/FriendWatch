@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace FriendWatch.DTOs.Requests
+﻿namespace FriendWatch.DTOs.Requests
 {
     public record ReplyToInvitationRequest
     {

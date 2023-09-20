@@ -1,16 +1,15 @@
-﻿using System.Text;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
-using Microsoft.IdentityModel.Tokens;
-
-
-using FriendWatch.Application.Services;
+using FriendWatch.Application.DTOs;
 using FriendWatch.Application.Repositories;
+using FriendWatch.Application.Services;
 using FriendWatch.Domain.Common;
 using FriendWatch.Domain.Entities;
-using FriendWatch.Application.DTOs;
+
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FriendWatch.Infrastructure.Services
 {
@@ -48,8 +47,8 @@ namespace FriendWatch.Infrastructure.Services
         {
             var decodedToken = new JwtSecurityTokenHandler().ReadJwtToken(token);
             var username = decodedToken.Claims.SingleOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
-            
-            if (string.IsNullOrEmpty(username)) 
+
+            if (string.IsNullOrEmpty(username))
             {
                 return new ServiceResponse<(string, string)>(false);
             }

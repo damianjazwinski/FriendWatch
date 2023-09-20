@@ -1,12 +1,8 @@
-﻿using System.Text;
-
-using BCrypt.Net;
-
-using FriendWatch.Application.Services;
+﻿using FriendWatch.Application.DTOs;
 using FriendWatch.Application.Repositories;
-using FriendWatch.Domain.Entities;
-using FriendWatch.Application.DTOs;
+using FriendWatch.Application.Services;
 using FriendWatch.Domain.Common;
+using FriendWatch.Domain.Entities;
 
 namespace FriendWatch.Infrastructure.Services
 {
@@ -21,7 +17,7 @@ namespace FriendWatch.Infrastructure.Services
         {
             // check for already existing user with given username
             var existingUser = await _userRepository.GetByUsernameAsync(userDto.Username);
-            
+
             if (existingUser != null)
                 return new ServiceResponse<UserDto>(false, null, "Username is already taken");
 
@@ -104,7 +100,7 @@ namespace FriendWatch.Infrastructure.Services
                 ContentType = userDto.AvatarImageDto.ContentType!,
                 Path = Path.Combine("files", generatedFileName)
             };
-            
+
 
             await _userRepository.UpdateAsync(user);
 

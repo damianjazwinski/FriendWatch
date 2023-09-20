@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using FriendWatch.Domain.Entities;
-
-namespace FriendWatch.Application.DTOs
+﻿namespace FriendWatch.Application.DTOs
 {
     public record CommentDto
     {

@@ -1,5 +1,4 @@
 ﻿using FriendWatch.Application.DTOs;
-using FriendWatch.Domain.Entities;
 
 namespace FriendWatch.DTOs.Responses
 {

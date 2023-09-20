@@ -5,19 +5,11 @@ using FriendWatch.Application.Services;
 using FriendWatch.Infrastructure.Persistence;
 using FriendWatch.Infrastructure.Repositories;
 using FriendWatch.Infrastructure.Services;
+using FriendWatch.Utils;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.Net.Http.Headers;
 using Microsoft.AspNetCore.Authorization;
-using FriendWatch.Middlewares;
-using Microsoft.Extensions.FileProviders;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using FriendWatch;
-using System.ComponentModel;
-using FriendWatch.Utils;
+using Microsoft.IdentityModel.Tokens;
 
 const string myCorsOriginName = "allowReactApp";
 var builder = WebApplication.CreateBuilder(args);

@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-
-using FriendWatch.Application.DTOs;
+﻿using FriendWatch.Application.DTOs;
 using FriendWatch.Application.Extensions;
 using FriendWatch.Application.Services;
 using FriendWatch.DTOs.Requests;
@@ -47,7 +45,7 @@ namespace FriendWatch.Controllers
                 ContentType = request.UserAvatarImage.ContentType,
                 Data = memoryStream.ToArray(),
             };
-            
+
             var result = await _userService.SetUserAvatar(userDto);
 
             if (!result.IsSuccess)

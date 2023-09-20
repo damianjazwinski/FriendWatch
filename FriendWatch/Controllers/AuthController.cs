@@ -1,16 +1,10 @@
-﻿using System.Net.Http.Headers;
-
-using Azure.Core;
-
-using FriendWatch.Application.DTOs;
+﻿using FriendWatch.Application.DTOs;
 using FriendWatch.Application.Services;
 using FriendWatch.DTOs.Requests;
 using FriendWatch.DTOs.Responses;
 
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
 
 namespace FriendWatch.Controllers
 {
@@ -43,7 +37,7 @@ namespace FriendWatch.Controllers
         [HttpGet("forbidden-ping")]
         public async Task<IActionResult> ForbiddenPing()
         {
-            return Ok(new {Ping =  "forbidden-ping"});
+            return Ok(new { Ping = "forbidden-ping" });
         }
 
         [Authorize(Policy = "RefreshPolicy")]
@@ -51,7 +45,7 @@ namespace FriendWatch.Controllers
         public async Task<IActionResult> Logout()
         {
             HttpContext.Response.Cookies.Delete(AccessTokenCookieName);
-            HttpContext.Response.Cookies.Delete(RefreshTokenCookieName, new CookieOptions { Path="api/auth" });
+            HttpContext.Response.Cookies.Delete(RefreshTokenCookieName, new CookieOptions { Path = "api/auth" });
             return Ok();
         }
 

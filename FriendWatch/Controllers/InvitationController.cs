@@ -1,9 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-using FriendWatch.Application.DTOs;
+﻿using FriendWatch.Application.DTOs;
 using FriendWatch.Application.Extensions;
 using FriendWatch.Application.Services;
-using FriendWatch.Domain.Common;
 using FriendWatch.DTOs.Requests;
 using FriendWatch.DTOs.Responses;
 
@@ -75,7 +72,7 @@ namespace FriendWatch.Controllers
             });
         }
 
-        [Authorize] 
+        [Authorize]
         [HttpPost("reply")]
         public async Task<IActionResult> ReplyToInvitation(ReplyToInvitationRequest request)
         {

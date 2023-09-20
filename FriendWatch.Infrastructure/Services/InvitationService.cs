@@ -1,9 +1,8 @@
-﻿using FriendWatch.Application.Services;
+﻿using FriendWatch.Application.DTOs;
 using FriendWatch.Application.Repositories;
-using FriendWatch.Domain.Entities;
-using FriendWatch.Application.DTOs;
+using FriendWatch.Application.Services;
 using FriendWatch.Domain.Common;
-using System.Collections.Generic;
+using FriendWatch.Domain.Entities;
 
 namespace FriendWatch.Infrastructure.Services
 {
@@ -14,8 +13,8 @@ namespace FriendWatch.Infrastructure.Services
         private readonly IUserRepository _userRepository;
 
         public InvitationService(
-            IInvitationRepository invitationRepository, 
-            ICircleRepository circleRepository, 
+            IInvitationRepository invitationRepository,
+            ICircleRepository circleRepository,
             IUserRepository userRepository)
         {
             _invitationRepository = invitationRepository;
@@ -35,7 +34,7 @@ namespace FriendWatch.Infrastructure.Services
             if (circle == null)
                 return new ServiceResponse<InvitationDto>(false, null, "Failed to load circle");
 
-            if(circle.Members.Exists(member => member.Id == invitationDto.ReceiverId))
+            if (circle.Members.Exists(member => member.Id == invitationDto.ReceiverId))
                 return new ServiceResponse<InvitationDto>(false, null, "User is already a member");
 
             var invitation = new Invitation

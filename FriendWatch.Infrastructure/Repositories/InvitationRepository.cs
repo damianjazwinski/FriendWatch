@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using FriendWatch.Application.Repositories;
-using FriendWatch.Infrastructure.Persistence;
+﻿using FriendWatch.Application.Repositories;
 using FriendWatch.Domain.Entities;
+using FriendWatch.Infrastructure.Persistence;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace FriendWatch.Infrastructure.Repositories
 {

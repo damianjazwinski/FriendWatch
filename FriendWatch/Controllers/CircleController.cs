@@ -1,18 +1,11 @@
-﻿using System.IO.Compression;
-using System.Security.Claims;
-
-using FriendWatch.Application.DTOs;
-using FriendWatch.Application.Services;
+﻿using FriendWatch.Application.DTOs;
 using FriendWatch.Application.Extensions;
+using FriendWatch.Application.Services;
 using FriendWatch.DTOs.Requests;
 using FriendWatch.DTOs.Responses;
 
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Azure.Core;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace FriendWatch.Controllers
 {

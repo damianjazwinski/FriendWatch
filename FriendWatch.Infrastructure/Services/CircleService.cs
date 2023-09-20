@@ -1,9 +1,8 @@
-﻿using FriendWatch.Application.Services;
+﻿using FriendWatch.Application.DTOs;
 using FriendWatch.Application.Repositories;
-using FriendWatch.Domain.Entities;
-using FriendWatch.Application.DTOs;
+using FriendWatch.Application.Services;
 using FriendWatch.Domain.Common;
-using Microsoft.EntityFrameworkCore.Metadata;
+using FriendWatch.Domain.Entities;
 
 namespace FriendWatch.Infrastructure.Services
 {
@@ -81,11 +80,11 @@ namespace FriendWatch.Infrastructure.Services
                 Id = circle.Id,
                 ImageFile = circle.ImageFile != null ? new ImageFileDto { Url = $"/api/download/{circle.ImageFile.FileName}" } : null,
                 Name = circle.Name,
-                Members = circle.Members.Select(member => new UserDto 
-                { 
-                    Id = member.Id, 
-                    Username = member.Username, 
-                    UserAvatarUrl = member.Avatar != null ? $"/api/download/{member.Avatar.FileName}" : null 
+                Members = circle.Members.Select(member => new UserDto
+                {
+                    Id = member.Id,
+                    Username = member.Username,
+                    UserAvatarUrl = member.Avatar != null ? $"/api/download/{member.Avatar.FileName}" : null
                 }).ToList()
             };
 
@@ -103,10 +102,10 @@ namespace FriendWatch.Infrastructure.Services
                 .Select(circle => new CircleDto
                 {
                     Id = circle.Id,
-                    CircleOwner = new UserDto 
-                    { 
-                        Id = circle.OwnerId, 
-                        Username = circle.Owner.Username, 
+                    CircleOwner = new UserDto
+                    {
+                        Id = circle.OwnerId,
+                        Username = circle.Owner.Username,
                     },
                     Name = circle.Name,
                     ImageFile = circle.ImageFile != null ? new ImageFileDto { Url = $"/api/download/{circle.ImageFile.FileName}" } : null

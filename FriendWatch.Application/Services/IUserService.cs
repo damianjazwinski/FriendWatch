@@ -1,6 +1,5 @@
 ﻿using FriendWatch.Application.DTOs;
 using FriendWatch.Domain.Common;
-using FriendWatch.Domain.Entities;
 
 namespace FriendWatch.Application.Services
 {

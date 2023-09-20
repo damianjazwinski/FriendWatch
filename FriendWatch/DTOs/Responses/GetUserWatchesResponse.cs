@@ -1,8 +1,4 @@
-﻿using System.Collections;
-
-using FriendWatch.Application.DTOs;
-
-namespace FriendWatch.DTOs.Responses
+﻿namespace FriendWatch.DTOs.Responses
 {
     public record GetUserWatchesResponse
     {

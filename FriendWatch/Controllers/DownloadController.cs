@@ -2,7 +2,6 @@
 using FriendWatch.DTOs.Responses;
 
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FriendWatch.Controllers

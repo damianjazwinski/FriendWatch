@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security.Claims;
 
 namespace FriendWatch.Application.Extensions
 {
@@ -12,8 +7,8 @@ namespace FriendWatch.Application.Extensions
         public static int GetUserId(this IEnumerable<Claim> claims)
         {
             return int.Parse(claims.Single(claim => claim.Type == ClaimTypes.NameIdentifier).Value);
-        }        
-        
+        }
+
         public static string GetUsername(this IEnumerable<Claim> claims)
         {
             return claims.Single(claim => claim.Type == ClaimTypes.Name).Value;
