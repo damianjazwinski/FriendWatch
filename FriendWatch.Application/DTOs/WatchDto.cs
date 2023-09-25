@@ -6,6 +6,7 @@
         public int CircleId { get; set; }
         public string Message { get; set; } = string.Empty;
         public string? ExternalLink { get; set; }
+        public DateTime? ExpirationDate { get; set; }
         public int CreatorId { get; set; }
         public UserDto? Creator { get; set; }
         public DateTime? CreatedAt { get; set; }

@@ -32,6 +32,7 @@ namespace FriendWatch.Infrastructure.Repositories
                 .Include(x => x.Circle)
                 .ThenInclude(y => y.Members)
                 .Where(x => x.Circle.Members.Any(y => y.Id == currentUserId))
+                .Where(x => x.ExpirationDate == null || x.ExpirationDate > DateTime.UtcNow)
                 .OrderByDescending(x => x.CreatedAt)
                 .ToListAsync();
         }

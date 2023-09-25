@@ -8,6 +8,7 @@ namespace FriendWatch.DTOs.Responses
         public int CircleId { get; set; }
         public string Message { get; set; } = string.Empty;
         public string? ExternalLink { get; set; }
+        public DateTime? ExpirationDate { get; set; }
         public int CreatorId { get; set; }
         public string CreatorName { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }

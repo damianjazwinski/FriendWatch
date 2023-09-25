@@ -41,6 +41,7 @@ namespace FriendWatch.Infrastructure.Services
                 CircleId = watchDto.CircleId,
                 Message = watchDto.Message,
                 ExternalLink = watchDto.ExternalLink,
+                ExpirationDate = watchDto.ExpirationDate,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
             };
@@ -65,6 +66,7 @@ namespace FriendWatch.Infrastructure.Services
                 UpdatedAt = watch.UpdatedAt,
                 Message = watch.Message,
                 ExternalLink = watch.ExternalLink,
+                ExpirationDate = watch.ExpirationDate,
                 CircleId = watch.CircleId,
                 Circle = new CircleDto
                 {

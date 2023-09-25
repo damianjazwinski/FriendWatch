@@ -36,7 +36,11 @@ namespace FriendWatch.Controllers
                 CreatorId = currentUserId,
                 Message = request.Message,
                 ExternalLink = request.ExternalLink,
+                ExpirationDate = request.ExpirationDate,
             };
+
+            if (request.ExpirationDate != null && request.ExpirationDate < DateTime.UtcNow)
+                return BadRequest(new ErrorResponse("Expiration date from past"));
 
             var result = await _watchService.CreateWatchAsync(watchDto);
 
@@ -89,6 +93,7 @@ namespace FriendWatch.Controllers
                     CircleName = watch.Circle!.Name,
                     Message = watch.Message,
                     ExternalLink = watch.ExternalLink,
+                    ExpirationDate = watch.ExpirationDate,
                     CreatorId = watch.CreatorId,
                     CreatorName = watch.Creator!.Username,
                     CreatorAvatarUrl = watch.Creator.UserAvatarUrl,
