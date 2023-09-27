@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="FriendWatch.Domain.Entities.Circle">
+    <Position X="0.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAACABCIAAAACAAQACAAAAQAAAAAAAAAAAAEAAAAAAA=</HashCode>
+      <FileName>Entities\Circle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FriendWatch.Domain.Entities.Comment">
+    <Position X="2.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAACAAAAAgAACAgAACAAAACAAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Entities\Comment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FriendWatch.Domain.Entities.Watch">
+    <Position X="4.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQACAAAAAAAACAACACAAAAAAQAgAAAQAEAAAIAAAIAA=</HashCode>
+      <FileName>Entities\Watch.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FriendWatch.Domain.Entities.ImageFile">
+    <Position X="2.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAQAABAAAA=</HashCode>
+      <FileName>Entities\ImageFile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FriendWatch.Domain.Entities.Invitation">
+    <Position X="4.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQACAAEAAAAACAAAACAAAAAAAAgEAAAAAAAAJAAAAAA=</HashCode>
+      <FileName>Entities\Invitation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FriendWatch.Domain.Entities.User">
+    <Position X="0.75" Y="3.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AQCCAAAAAAAABAAAAQQAAAAAAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

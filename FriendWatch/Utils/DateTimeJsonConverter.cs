@@ -3,16 +3,25 @@ using System.Text.Json.Serialization;
 
 namespace FriendWatch.Utils
 {
-    public class DateTimeJsonConverter : JsonConverter<DateTime>
+    public class DateTimeJsonConverter : JsonConverter<DateTime?>
     {
-        public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override DateTime? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
+            if (reader.GetString() == string.Empty)
+                return null;
+
             return reader.GetDateTime().ToUniversalTime();
         }
 
-        public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, DateTime? value, JsonSerializerOptions options)
         {
-            writer.WriteStringValue(value.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ssZ"));
+            if (value is null)
+            {
+                writer.WriteNullValue();
+                return;
+            }
+
+            writer.WriteStringValue(value.Value.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ssZ"));
         }
     }
 }

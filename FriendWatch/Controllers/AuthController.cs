@@ -52,8 +52,6 @@ namespace FriendWatch.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRequest request)
         {
-            // TODO: Add confirmation validation logic
-
             var userDto = new UserRequestDto
             {
                 Username = request.Username,
