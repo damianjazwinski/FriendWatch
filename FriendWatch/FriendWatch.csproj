@@ -9,12 +9,16 @@
   <ItemGroup>
     <Compile Remove="files\circles\**" />
     <Compile Remove="files\NewFolder\**" />
+    <Compile Remove="Middlewares\**" />
     <Content Remove="files\circles\**" />
     <Content Remove="files\NewFolder\**" />
+    <Content Remove="Middlewares\**" />
     <EmbeddedResource Remove="files\circles\**" />
     <EmbeddedResource Remove="files\NewFolder\**" />
+    <EmbeddedResource Remove="Middlewares\**" />
     <None Remove="files\circles\**" />
     <None Remove="files\NewFolder\**" />
+    <None Remove="Middlewares\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,10 +41,6 @@
   <ItemGroup>
     <ProjectReference Include="..\FriendWatch.Application\FriendWatch.Application.csproj" />
     <ProjectReference Include="..\FriendWatch.Infrastructure\FriendWatch.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Middlewares\" />
   </ItemGroup>
 
 </Project>

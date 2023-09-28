@@ -26,20 +26,6 @@ namespace FriendWatch.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet("public-ping")]
-        public async Task<IActionResult> PublicPing()
-        {
-            return Ok("public-ping");
-        }
-
-
-        [Authorize]
-        [HttpGet("forbidden-ping")]
-        public async Task<IActionResult> ForbiddenPing()
-        {
-            return Ok(new { Ping = "forbidden-ping" });
-        }
-
         [Authorize(Policy = "RefreshPolicy")]
         [HttpGet("logout")]
         public async Task<IActionResult> Logout()
